@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#111312" />
+    <meta
+      name="description"
+      content="香港与大陆经典影视人物主题的小型服务端卡牌游戏。"
+    />
+    <title>电影大乱斗</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="boot-screen" id="boot-screen">
+      <div class="boot-mark" data-i18n="brand.mark">影</div>
+      <strong data-i18n="boot.loading">片场布置中</strong>
+    </div>
+
+    <main class="app-shell">
+      <header class="topbar">
+        <div class="brand-lockup">
+          <span class="brand-mark" data-i18n="brand.mark" aria-hidden="true">影</span>
+          <div>
+            <div class="brand-line">
+              <h1 data-i18n="brand.title">电影大乱斗</h1>
+              <span class="edition-tag" data-i18n="brand.edition">首映版</span>
+            </div>
+            <p data-i18n="brand.subtitle">华语银幕角色卡牌对决</p>
+          </div>
+        </div>
+
+        <nav class="view-tabs" data-i18n-aria="nav.label" aria-label="主视图">
+          <button class="tab-button active" data-view="adventure" type="button">
+            <span aria-hidden="true">◆</span>
+            <span data-i18n="nav.adventure">冒险</span>
+          </button>
+          <button class="tab-button" data-view="battle" type="button" disabled>
+            <span aria-hidden="true">⚔</span>
+            <span data-i18n="nav.battle">对战</span>
+          </button>
+          <button class="tab-button" data-view="collection" type="button">
+            <span aria-hidden="true">▦</span>
+            <span data-i18n="nav.collection">图鉴</span>
+          </button>
+        </nav>
+
+        <div class="topbar-actions">
+          <label class="language-control compact-control">
+            <span data-i18n="control.language">语言</span>
+            <select
+              id="language-select"
+              data-i18n-aria="control.languageAria"
+              aria-label="界面语言"
+            >
+              <option value="zh-CN" data-i18n="control.chinese">中文</option>
+              <option value="en" data-i18n="control.english">English</option>
+            </select>
+          </label>
+          <label class="difficulty-control">
+            <span data-i18n="control.ai">AI 难度</span>
+            <select
+              id="ai-difficulty"
+              data-i18n-aria="control.aiAria"
+              aria-label="机器人难度"
+            >
+              <option value="easy" data-i18n="control.easy">群演 · 简单</option>
+              <option value="normal" data-i18n="control.normal" selected>导演 · 标准</option>
+              <option value="hard" data-i18n="control.hard">影帝 · 困难</option>
+            </select>
+          </label>
+          <div class="server-state" id="server-state">
+            <span class="server-dot"></span>
+            <span id="server-label" data-i18n="connection.connecting">连接中</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="view" id="battle-view" data-i18n-aria="battle.label" aria-label="对战">
+        <div class="battle-layout">
+          <div class="cinema-stage">
+            <div class="curtain-line top"></div>
+
+            <section class="combatant-zone enemy-zone" data-i18n-aria="battle.enemyRegion" aria-label="对手区域">
+              <div class="hero-row enemy-hero-row">
+                <div class="enemy-hand" id="enemy-hand" data-i18n-aria="battle.enemyHand" aria-label="对手手牌"></div>
+                <div class="resource-cluster enemy-resources">
+                  <div class="resource-item">
+                    <span data-i18n="battle.deck">牌库</span>
+                    <strong id="enemy-deck">30</strong>
+                  </div>
+                  <div class="resource-item">
+                    <span data-i18n="battle.hand">手牌</span>
+                    <strong id="enemy-hand-count">3</strong>
+                  </div>
+                  <div class="mana-display">
+                    <span class="mana-value" id="enemy-mana-value">0/0</span>
+                    <div class="mana-row" id="enemy-mana"></div>
+                  </div>
+                </div>
+                <button class="hero-panel enemy-hero" id="enemy-hero" type="button">
+                  <span class="hero-portrait enemy-portrait" data-i18n="battle.enemyMark">反</span>
+                  <span class="hero-copy">
+                    <span class="hero-kicker" data-i18n="battle.opponent">对手</span>
+                    <strong class="hero-name" id="enemy-hero-name">反派制片方</strong>
+                  </span>
+                  <span class="weapon-slot" id="enemy-weapon" hidden>
+                    <strong id="enemy-weapon-name" data-i18n="battle.notEquipped">未装备</strong>
+                    <small id="enemy-weapon-stats">0 / 0</small>
+                  </span>
+                  <span class="health-orb">
+                    <span aria-hidden="true">♥</span>
+                    <strong id="enemy-health">30</strong>
+                  </span>
+                </button>
+              </div>
+
+              <div class="board-frame enemy-board-frame">
+                <span class="board-label" data-i18n="battle.enemyFormation">对手阵容</span>
+                <div class="board-row" id="enemy-board"></div>
+              </div>
+            </section>
+
+            <div class="turn-divider">
+              <div class="divider-line"></div>
+              <div class="turn-medallion">
+                <span id="turn-label" data-i18n="battle.yourTurn">你的回合</span>
+                <strong id="turn-count">1</strong>
+                <small data-i18n="battle.round">场</small>
+              </div>
+              <div class="turn-actions">
+                <button
+                  class="icon-button"
+                  id="restart-button"
+                  data-i18n-title="battle.restart"
+                  data-i18n-aria="battle.restart"
+                  title="重新开局"
+                  aria-label="重新开局"
+                  type="button"
+                >
+                  ↻
+                </button>
+                <button class="primary-button" id="end-turn-button" type="button">
+                  <span data-i18n="battle.endTurn">结束回合</span>
+                  <span aria-hidden="true">›</span>
+                </button>
+              </div>
+              <div class="divider-line"></div>
+            </div>
+
+            <section class="combatant-zone player-zone" data-i18n-aria="battle.playerRegion" aria-label="玩家区域">
+              <div class="board-frame player-board-frame">
+                <span class="board-label" data-i18n="battle.ourFormation">我方阵容</span>
+                <div class="board-row" id="player-board"></div>
+              </div>
+
+              <div class="hero-row player-hero-row">
+                <button class="hero-panel player-hero" id="player-hero" type="button">
+                  <span class="hero-portrait player-portrait" data-i18n="battle.playerMark">影</span>
+                  <span class="hero-copy">
+                    <span class="hero-kicker" data-i18n="battle.player">玩家</span>
+                    <strong class="hero-name" id="player-hero-name">金像影迷</strong>
+                  </span>
+                  <span class="weapon-slot" id="player-weapon" hidden>
+                    <strong id="player-weapon-name" data-i18n="battle.notEquipped">未装备</strong>
+                    <small id="player-weapon-stats">0 / 0</small>
+                  </span>
+                  <span class="health-orb">
+                    <span aria-hidden="true">♥</span>
+                    <strong id="player-health">30</strong>
+                  </span>
+                </button>
+                <div class="resource-cluster player-resources">
+                  <div class="mana-display">
+                    <span class="mana-value" id="player-mana-value">1/1</span>
+                    <div class="mana-row" id="player-mana"></div>
+                  </div>
+                  <div class="resource-item">
+                    <span data-i18n="battle.deck">牌库</span>
+                    <strong id="player-deck">26</strong>
+                  </div>
+                  <div class="resource-item">
+                    <span data-i18n="battle.hand">手牌</span>
+                    <strong id="player-hand-count">4</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hand-dock">
+                <div class="hand-heading">
+                  <span data-i18n="battle.myHand">我的手牌</span>
+                  <strong id="action-status" data-i18n="battle.waiting">等待行动</strong>
+                </div>
+                <div class="hand-row" id="player-hand"></div>
+              </div>
+            </section>
+
+            <div class="curtain-line bottom"></div>
+          </div>
+
+          <aside class="match-sidebar">
+            <section class="sidebar-panel log-panel">
+              <div class="panel-heading">
+                <div>
+                  <span class="panel-kicker" data-i18n="battle.liveKicker">现场记录</span>
+                  <h2 data-i18n="battle.logTitle">本场战报</h2>
+                </div>
+                <span class="live-tag">LIVE</span>
+              </div>
+              <ol class="log-list" id="log-list" aria-live="polite"></ol>
+            </section>
+
+            <section class="sidebar-panel inspector-panel" id="card-inspector">
+              <div class="inspector-art palette-gold">
+                <span id="inspector-motif" data-i18n="battle.playerMark">影</span>
+              </div>
+              <div class="inspector-copy">
+                <span class="panel-kicker" id="inspector-star" data-i18n="battle.currentMatch">当前场次</span>
+                <h2 id="inspector-title" data-i18n="battle.stageReady">片场就绪</h2>
+                <p id="inspector-movie"><span data-i18n="battle.round">第</span> <span id="inspector-turn">1</span></p>
+                <p id="inspector-text" data-i18n="battle.serverOwnsState">服务端正在维护本局状态。</p>
+              </div>
+              <div class="inspector-stats" id="inspector-stats" hidden>
+                <span><span data-i18n="battle.attack">攻</span> <strong id="inspector-attack">0</strong></span>
+                <span><span data-i18n="battle.health">血</span> <strong id="inspector-health">0</strong></span>
+                <span><span data-i18n="battle.cost">费</span> <strong id="inspector-cost">0</strong></span>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </section>
+
+      <section class="view" id="collection-view" data-i18n-aria="collection.label" aria-label="图鉴">
+        <div class="section-heading">
+          <div>
+            <span class="section-kicker" data-i18n="collection.kicker">角色档案馆</span>
+            <h2 data-i18n="collection.title">银幕图鉴</h2>
+          </div>
+          <strong id="collection-count">0 / 123 张已获得</strong>
+        </div>
+        <div class="collection-toolbar">
+          <label class="search-wrap">
+            <span aria-hidden="true">⌕</span>
+            <input id="card-search" type="search" data-i18n-placeholder="collection.search" placeholder="搜索明星、角色、片名、技能" />
+          </label>
+          <select id="star-filter" data-i18n-aria="collection.starAria" aria-label="明星筛选"></select>
+          <select id="type-filter" data-i18n-aria="collection.typeAria" aria-label="类型筛选">
+            <option value="all" data-i18n="collection.allCards">全部卡牌</option>
+            <option value="role" data-i18n="collection.roles">角色卡</option>
+            <option value="spell" data-i18n="collection.spells">法术牌</option>
+            <option value="weapon" data-i18n="collection.weapons">武器牌</option>
+          </select>
+        </div>
+        <div class="collection-grid" id="collection-grid"></div>
+      </section>
+
+      <section class="view active" id="adventure-view" data-i18n-aria="adventure.label" aria-label="冒险">
+        <header class="adventure-header">
+          <div class="adventure-title">
+            <span class="adventure-emblem" data-i18n="adventure.mark" aria-hidden="true">邵</span>
+            <div>
+              <span class="section-kicker" data-i18n="adventure.kicker">单机冒险 · 第一片场</span>
+              <h2 data-i18n="adventure.name">邵氏片场</h2>
+              <p data-i18n="adventure.subtitle">刀光、拳影与三十六房</p>
+            </div>
+          </div>
+          <div class="adventure-progress">
+            <span data-i18n="adventure.progress">片场进度</span>
+            <strong id="adventure-progress-count">0 / 8</strong>
+            <div class="progress-track">
+              <span id="adventure-progress-bar"></span>
+            </div>
+          </div>
+          <button class="secondary-button" id="practice-button" type="button">
+            <span data-i18n="adventure.practice">练习对战</span>
+          </button>
+        </header>
+
+        <div class="adventure-layout">
+          <section class="stage-map" data-i18n-aria="adventure.mapAria" aria-label="邵氏冒险关卡">
+            <div class="stage-map-heading">
+              <div>
+                <span class="section-kicker" data-i18n="adventure.eightActs">八幕连映</span>
+                <h3 data-i18n="adventure.route">关卡路线</h3>
+              </div>
+              <span id="adventure-owned-count">已获得 0 张片场卡</span>
+            </div>
+            <div class="stage-list" id="adventure-stage-list"></div>
+          </section>
+
+          <aside class="stage-brief" id="stage-brief">
+            <div class="stage-brief-topline">
+              <span id="stage-brief-number">第 1 关</span>
+              <strong id="stage-brief-type">小头目</strong>
+            </div>
+            <div class="stage-poster" id="stage-poster" aria-hidden="true">
+              <span id="stage-poster-motif">虎</span>
+            </div>
+            <span class="panel-kicker" id="stage-brief-movie">《大醉侠》</span>
+            <h2 id="stage-brief-title">客栈试锋</h2>
+            <p class="stage-boss-name"><span data-i18n="adventure.boss">头目：</span><strong id="stage-boss-name">玉面虎</strong></p>
+            <div class="mechanic-brief">
+              <span data-i18n="adventure.mechanic">场地机制</span>
+              <strong id="stage-mechanic-title">客栈伏兵</strong>
+              <p id="stage-mechanic-text"></p>
+            </div>
+            <div class="reward-preview">
+              <span data-i18n="adventure.firstReward">首通奖励</span>
+              <p id="stage-reward-copy">从三张普通邵氏卡中选择一张。</p>
+            </div>
+            <button class="primary-button stage-start-button" id="stage-start-button" type="button">
+              进入片场 <span aria-hidden="true">›</span>
+            </button>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <template id="card-template">
+      <article class="game-card">
+        <div class="card-cost" data-i18n-title="card.costTitle" title="费用"></div>
+        <div class="card-art">
+          <div class="film-perforation top"></div>
+          <div class="film-perforation bottom"></div>
+          <div class="spotlight"></div>
+          <div class="card-mark"></div>
+          <span class="card-rarity" data-i18n="card.classic">经典</span>
+        </div>
+        <div class="card-body">
+          <p class="card-star"></p>
+          <h3 class="card-title"></h3>
+          <p class="card-movie"></p>
+          <p class="card-text"></p>
+        </div>
+        <div class="card-stat card-attack" data-i18n-title="card.attackTitle" title="攻击"></div>
+        <div class="card-stat card-health" data-i18n-title="card.healthTitle" title="生命"></div>
+      </article>
+    </template>
+
+    <div class="game-over" id="game-over" hidden>
+      <div class="game-over-panel">
+        <span class="game-over-kicker" data-i18n="outcome.kicker">本场落幕</span>
+        <div class="game-over-mark" id="game-over-mark" data-i18n="outcome.playerMark">胜</div>
+        <h2 id="game-over-title" data-i18n="outcome.playerTitle">首映告捷</h2>
+        <p id="game-over-copy" data-i18n="outcome.playerCopy">头目已经退场。</p>
+        <div class="reward-panel" id="reward-panel" hidden>
+          <span class="panel-kicker" data-i18n="outcome.rewardKicker">首通奖励</span>
+          <h3 id="reward-title" data-i18n="outcome.chooseCard">选择一张卡牌</h3>
+          <div class="reward-options" id="reward-options"></div>
+        </div>
+        <button class="primary-button" id="rematch-button" data-i18n="outcome.rematch" type="button">再战一场</button>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+    <script src="./localization/entities.js"></script>
+    <script src="./localization/movies.js"></script>
+    <script src="./localization/adventures.js"></script>
+    <script src="./localization/messages.js"></script>
+    <script src="./localization/card-describer.js"></script>
+    <script src="./localization/log-translator.js"></script>
+    <script src="./localization/i18n.js"></script>
+    <script src="./shaw-cards.js"></script>
+    <script src="./shaw-adventure.js"></script>
+    <script src="./starter-cards.js"></script>
+    <script src="./expansion-data.js"></script>
+    <script src="./game-data.js"></script>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
