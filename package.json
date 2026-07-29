@@ -2,7 +2,7 @@
   "name": "movie-brawl",
   "version": "0.1.0",
   "private": true,
-  "description": "香港与大陆经典怀旧影视人物主题的单机卡牌游戏",
+  "description": "A bilingual solo card game inspired by classic Hong Kong and Mainland Chinese cinema",
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",

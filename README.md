@@ -1,130 +1,155 @@
-# 电影大乱斗
+# Movie Brawl
 
-一款以香港与大陆经典电影、电视剧角色为主题的小型服务端卡牌游戏。
+A small server-authoritative solo card game featuring characters from classic
+Hong Kong and Mainland Chinese films and television series.
 
-> 当前版本：`0.1.0` 单机冒险 MVP。项目仍在平衡与内容开发阶段，暂不包含
-> PVP、账号系统或线上存档。
+> Current version: `0.1.0` solo adventure MVP. Card balance and content are
+> still in development. PVP, accounts, and cloud saves are not included yet.
 
-![邵氏片场冒险界面](docs/screenshots/shaw-adventure.jpg)
+![Shaw Studio adventure screen](docs/screenshots/shaw-adventure.jpg)
 
-![服务端权威卡牌战斗界面](docs/screenshots/battle.jpg)
+![Server-authoritative card battle](docs/screenshots/battle.jpg)
 
-## 为什么做这个游戏
+## Why I Built This Game
 
-我一直很喜欢香港电影，尤其是那些承载着时代质感和共同记忆的经典怀旧片。
-同时我也是一名卡牌游戏爱好者，所以想把熟悉的银幕人物、片场故事与卡牌
-对战结合起来，做成一款可以慢慢扩充的单机游戏。
+I have always loved Hong Kong cinema, especially nostalgic classics that carry
+the texture and shared memories of their time. I am also a card game fan, so I
+wanted to bring familiar screen characters and studio stories into a card
+battler that can keep growing over time.
 
-## 游戏内容
+## Game Content
 
-- 10 位明星，每位 6 张角色卡，共 60 张角色卡。
-- 支持中文与英文即时切换，覆盖界面、123 张卡牌、冒险内容、战报和错误提示。
-- 15 张新手牌组：4 张一费、5 张二费、4 张三费和 2 张核心牌，并保证前三张起手分别包含一、二、三费。
-- 基础与经典卡池共 105 张，另有 18 张可通过邵氏冒险获得的角色、法术和武器。
-- 邵氏片场共 8 关：第 3、5 关为中头目，第 8 关为最终头目。
-- 小头目首通后三选一普通卡；中头目和最终头目奖励对应头目卡。
-- 冒险进度与收藏保存在服务端本机存档，未获得的片场卡不会进入玩家牌组。
-- 1v1 人机对战，包含费用、牌库、手牌、战场、疲劳和胜负结算。
-- 机器人分为简单、标准、困难三套独立策略。
-- 已支持嘲讽、护盾、疾冲、吸血、眩晕、召唤、亡语、反伤和融合。
-- 武器拥有攻击与耐久，装备后英雄每回合可以攻击一次。
-- 图鉴搜索筛选、套牌构成和本机生涯战绩。
+- 10 stars with 6 character cards each, for a total of 60 character cards.
+- Instant Chinese and English switching across the interface, all 123 cards,
+  adventure content, battle logs, and error messages.
+- A 15-card beginner deck with four 1-cost cards, five 2-cost cards, four
+  3-cost cards, and two core cards. The opening hand is guaranteed to include a
+  1-cost, 2-cost, and 3-cost card.
+- 105 Basic and Classic cards, plus 18 characters, spells, and weapons earned
+  through the Shaw Studio adventure.
+- Eight Shaw Studio stages. Stages 3 and 5 are mid-bosses, and stage 8 is the
+  final boss.
+- Defeating a standard boss for the first time offers a choice of three common
+  cards. Mid-bosses and the final boss award their corresponding boss cards.
+- Adventure progress and the collection are stored in a local server save.
+  Locked studio cards cannot enter the player's deck.
+- A 1v1 battle system with Film Power, decks, hands, boards, fatigue, and
+  victory resolution.
+- Three independent AI strategies: Easy, Normal, and Hard.
+- Taunt, Shield, Rush, Lifesteal, Stun, Summon, Deathrattle, Retaliate, and
+  Fusion mechanics.
+- Weapons have Attack and Durability, allowing the hero to attack once per
+  turn while equipped.
+- Collection search and filtering, deck composition details, and local career
+  records.
 
-## 启动
+## Getting Started
 
-macOS 可以双击 `启动游戏.command`。
+On macOS, double-click the included `.command` launcher.
 
-也可以在项目目录运行：
+Alternatively, run this command from the project directory:
 
 ```bash
 npm start
 ```
 
-然后打开 <http://127.0.0.1:4173>。
+Then open <http://127.0.0.1:4173>.
 
-项目需要 Node.js 20 或更高版本，不需要安装第三方依赖。
+The project requires Node.js 20 or later and has no third-party runtime
+dependencies.
 
-语言选择保存在当前浏览器中。中英文共用同一份卡牌规则、冒险进度和
-`data/profile.json` 存档，切换语言不会重开对局。
+Your language choice is saved in the current browser. Chinese and English use
+the same card rules, adventure progress, and `data/profile.json` save. Changing
+language does not restart an active match.
 
-## 当前玩法
+## How to Play
 
-1. 在“片场冒险”进入邵氏片场，按顺序挑战 8 个关卡。
-2. 小头目胜利后三选一；中头目与最终头目直接解锁对应头目卡。
-3. 奖励卡会替换初始牌组中费用最接近的同类型卡，牌组始终保持 15 张。
-4. 进度保存在 `data/profile.json`。删除该文件即可重置冒险存档。
+1. Enter Shaw Studio from the Adventure screen and challenge its eight stages
+   in order.
+2. After defeating a standard boss, choose one of three cards. Mid-bosses and
+   the final boss unlock their corresponding boss cards directly.
+3. Reward cards replace the closest-cost Basic card of the same type, keeping
+   the deck at 15 cards.
+4. Progress is stored in `data/profile.json`. Delete this file to reset the
+   adventure save.
 
-## 项目结构
+## Project Structure
 
 ```text
 .
-├── index.html                 # 页面结构
-├── styles.css                # 视觉与响应式布局
-├── app.js                    # 浏览器启动入口
-├── game-data.js              # 前后端共用的卡牌数据
-├── shaw-cards.js             # 邵氏片场奖励卡
-├── shaw-adventure.js         # 八关内容与奖励配置
-├── starter-cards.js          # 新手普通白卡
-├── assets/                   # 原创游戏视觉资产
-├── localization/             # 人物、片名、冒险、界面与动态战报翻译
-├── server.js                 # HTTP 服务与静态资源入口
+├── index.html                 # Page structure
+├── styles.css                # Visual design and responsive layout
+├── app.js                    # Browser bootstrap
+├── game-data.js              # Shared client/server card data
+├── shaw-cards.js             # Shaw Studio reward cards
+├── shaw-adventure.js         # Eight-stage adventure configuration
+├── starter-cards.js          # Beginner common cards
+├── assets/                   # Original game visual assets
+├── localization/             # UI, card, film, adventure, and log translations
+├── server.js                 # HTTP server and static asset entrypoint
 ├── client/
-│   ├── game-controller.js    # 前端流程控制
-│   ├── i18n.js               # 浏览器语言模块入口
-│   ├── game-api-client.js    # 对局 API
-│   ├── battle-view.js        # 牌桌视图
-│   ├── card-renderer.js      # 卡牌和详情渲染
-│   ├── collection-view.js    # 图鉴视图
-│   ├── adventure-view.js     # 冒险地图和关卡详情
-│   ├── outcome-view.js       # 胜负与奖励选择
-│   └── feedback-view.js      # 加载、错误和胜负反馈
+│   ├── game-controller.js    # Frontend flow controller
+│   ├── i18n.js               # Browser localization entrypoint
+│   ├── game-api-client.js    # Match API client
+│   ├── battle-view.js        # Battle board view
+│   ├── card-renderer.js      # Card and inspector rendering
+│   ├── collection-view.js    # Collection view
+│   ├── adventure-view.js     # Adventure map and stage details
+│   ├── outcome-view.js       # Results and reward selection
+│   └── feedback-view.js      # Loading, error, and outcome feedback
 ├── server/
-│   ├── game-engine.js        # 战斗引擎公共入口
-│   ├── game-service.js       # 对局会话管理
-│   ├── adventure/            # 冒险目录、存档、奖励与头目机制
+│   ├── game-engine.js        # Public battle engine entrypoint
+│   ├── game-service.js       # Match session management
+│   ├── adventure/            # Catalog, saves, rewards, and boss mechanics
 │   └── game/
-│       ├── game-engine.js    # 动作编排
-│       ├── game-state.js     # 对局状态与生命周期
-│       ├── card-factory.js   # 牌库和卡牌实例
-│       ├── combat-resolver.js # 攻击与伤害
-│       ├── effect-resolver.js # 技能效果
-│       ├── death-resolver.js # 亡语与死亡队列
-│       ├── advanced-effect-handlers.js # 融合与反伤增益
-│       ├── ai-director.js    # 人机回合调度
-│       ├── ai/               # 三档机器人策略
-│       └── game-serializer.js # 客户端安全视图
+│       ├── game-engine.js    # Action orchestration
+│       ├── game-state.js     # Match state and lifecycle
+│       ├── card-factory.js   # Deck and card instances
+│       ├── combat-resolver.js # Attacks and damage
+│       ├── effect-resolver.js # Card effects
+│       ├── death-resolver.js # Deathrattles and death queue
+│       ├── advanced-effect-handlers.js # Fusion and Retaliate buffs
+│       ├── ai-director.js    # AI turn orchestration
+│       ├── ai/               # Three AI difficulty strategies
+│       └── game-serializer.js # Client-safe match state
 └── test/
-    ├── game-engine.test.js   # 核心规则回归测试
-    └── architecture.test.js  # 模块边界检查
+    ├── game-engine.test.js   # Core rule regression tests
+    ├── i18n.test.js          # Chinese and English coverage
+    └── architecture.test.js  # Module boundary checks
 ```
 
-浏览器只提交动作，所有费用、目标、战斗、技能、AI 和胜负均由
-`server/game-engine.js` 校验及结算。新增普通技能时在
-`EffectResolver` 注册处理器，融合等复合机制放入
-`AdvancedEffectHandlers`，并为规则边界补充测试。
+The browser only submits actions. The server validates and resolves Film Power
+costs, legal targets, combat, card effects, AI turns, and victory through
+`server/game-engine.js`. Standard effects are registered in `EffectResolver`,
+while compound mechanics such as Fusion belong in `AdvancedEffectHandlers`.
 
-头目战使用独立的 `BossEncounter` 叠加场地规则和阶段效果。玩家取得的
-奖励卡来自单独的标准构筑数据，不会继承头目的额外生命、专属武器或
-场地能力。
+Boss battles use a separate `BossEncounter` layer for stage rules and phase
+effects. Reward cards use standard constructed-play data and never inherit a
+boss's bonus health, exclusive weapon, or encounter ability.
 
-## 测试
+## Testing
 
 ```bash
 npm test
 ```
 
-测试覆盖卡牌数据、起手曲线、服务端动作校验、三档 AI、战斗关键词、
-亡语结算、冒险解锁与奖励，以及防止业务逻辑重新堆回单文件的架构约束。
+The test suite covers card data, the beginner mana curve, server-side action
+validation, three AI strategies, combat keywords, Deathrattle resolution,
+adventure progression and rewards, bilingual content, and architecture rules
+that prevent the project from collapsing back into a monolith.
 
-## 开发状态
+## Development Status
 
-- 已完成：服务端权威战斗、三档 AI、15 张新手牌组、邵氏 8 关冒险、
-  123 张卡牌数据与本机存档。
-- 正在打磨：八关真人难度、卡牌文字一致性、动画与音效反馈。
-- 后续方向：更多片场、套牌编辑、存档槽与完整新手引导。
+- Complete: server-authoritative battles, three AI difficulties, a 15-card
+  beginner deck, the eight-stage Shaw Studio adventure, 123 cards, bilingual
+  presentation, and local saves.
+- In progress: stage balance, consistent card wording, animation, and audio
+  feedback.
+- Planned: more studios, deck building, save slots, and a complete tutorial.
 
-## 内容说明
+## Content Notice
 
-这是一个非商业学习与原型项目。影视作品、角色及相关名称的权利归各自
-权利方所有；仓库中的界面与原创视觉资产仅用于展示游戏设计和工程实现。
-公开仓库前仍需由维护者选择适合代码部分的开源许可证。
+This is a non-commercial learning project and game prototype. The rights to
+film and television titles, characters, and related names belong to their
+respective owners. The interface and original visual assets in this repository
+are included only to demonstrate game design and engineering work.
