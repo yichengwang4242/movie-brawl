@@ -51,32 +51,23 @@ class CardFactory {
         )[0]?.index;
       if (replacement >= 0) deck.splice(replacement, 1, bonus);
     }
-    return this.ensureOpeningCurve(this.random.shuffle(deck));
-  }
-
-  ensureOpeningCurve(deck) {
-    const remaining = [...deck];
-    const opening = [];
-    for (const cost of [1, 2, 3]) {
-      const index = remaining.findIndex((card) => card.cost === cost);
-      if (index >= 0) opening.push(...remaining.splice(index, 1));
-    }
-    return [...opening, ...remaining];
+    return this.random.shuffle(deck);
   }
 
   createInstance(base) {
     this.instanceCounter += 1;
+    const printedKeywords = [...base.keywords];
+    const printedDeathEffects = (base.deathEffects || []).map((effect) =>
+      this.cloneEffect(effect),
+    );
     return {
       ...base,
-      keywords: [...base.keywords],
-      effects: base.effects.map((effect) => ({
-        ...effect,
-        ...(effect.token ? { token: { ...effect.token } } : {}),
-      })),
-      deathEffects: (base.deathEffects || []).map((effect) => ({
-        ...effect,
-        ...(effect.token ? { token: { ...effect.token } } : {}),
-      })),
+      keywords: [...printedKeywords],
+      effects: base.effects.map((effect) => this.cloneEffect(effect)),
+      deathEffects: printedDeathEffects.map((effect) => this.cloneEffect(effect)),
+      printedKeywords,
+      printedDeathEffects,
+      printedReflect: base.reflect || 0,
       requirements: base.requirements ? { ...base.requirements } : null,
       instanceId: `card-${this.instanceCounter}`,
       currentAttack: base.attack || 0,
@@ -88,9 +79,33 @@ class CardFactory {
       attacksRemaining: 0,
       attackRestriction: null,
       summonedTurn: null,
-      shield: base.keywords.includes("shield"),
+      shield: printedKeywords.includes("shield"),
       stunned: false,
       skipNextReady: false,
+    };
+  }
+
+  cloneEffect(effect) {
+    return {
+      ...effect,
+      ...(effect.token ? { token: { ...effect.token } } : {}),
+      ...(effect.effects
+        ? { effects: effect.effects.map((nested) => this.cloneEffect(nested)) }
+        : {}),
+      ...(effect.commercialEffects
+        ? {
+            commercialEffects: effect.commercialEffects.map((nested) =>
+              this.cloneEffect(nested),
+            ),
+          }
+        : {}),
+      ...(effect.creativeEffects
+        ? {
+            creativeEffects: effect.creativeEffects.map((nested) =>
+              this.cloneEffect(nested),
+            ),
+          }
+        : {}),
     };
   }
 

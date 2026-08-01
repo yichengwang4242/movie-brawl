@@ -4,7 +4,8 @@ export class AdventureView {
     this.callbacks = callbacks;
     this.i18n = i18n;
     this.payload = null;
-    this.selectedStageId = null;
+    this.selectedAdventureId = null;
+    this.selectedStageIds = new Map();
     this.bindEvents();
   }
 
@@ -20,27 +21,80 @@ export class AdventureView {
 
   render(payload) {
     this.payload = payload;
-    const adventure = payload.adventures[0];
+    const adventure =
+      payload.adventures.find(
+        (candidate) => candidate.id === this.selectedAdventureId,
+      ) || payload.adventures[0];
     if (!adventure) return;
+    this.selectedAdventureId = adventure.id;
     const firstAvailable =
       adventure.stages.find(
         (stage) => stage.unlocked && !stage.completed,
       ) || adventure.stages[adventure.stages.length - 1];
-    const current = adventure.stages.find(
-      (stage) => stage.id === this.selectedStageId,
-    );
-    this.selectedStageId = (current || firstAvailable).id;
+    const current = adventure.stages.find((stage) =>
+      stage.id === this.selectedStageIds.get(adventure.id));
+    this.selectedStageIds.set(adventure.id, (current || firstAvailable).id);
 
+    this.renderStudioTabs();
+    this.renderHeader(adventure);
     this.elements.adventureProgressCount.textContent =
       `${adventure.completedCount} / ${adventure.stages.length}`;
     this.elements.adventureProgressBar.style.width =
       `${(adventure.completedCount / adventure.stages.length) * 100}%`;
     this.elements.adventureOwnedCount.textContent =
       this.i18n.t("adventure.owned", {
-        count: payload.profile.ownedCardIds.length,
+        count: adventure.ownedCount,
       });
     this.renderStages(adventure.stages);
     this.renderBrief();
+  }
+
+  renderStudioTabs() {
+    const container = this.elements.adventureStudioTabs;
+    container.innerHTML = "";
+    for (const adventure of this.payload.adventures) {
+      const translated = this.i18n.adventure(adventure);
+      const button = document.createElement("button");
+      button.type = "button";
+      button.role = "tab";
+      button.className = "studio-tab";
+      button.classList.toggle("active", adventure.id === this.selectedAdventureId);
+      button.setAttribute(
+        "aria-selected",
+        String(adventure.id === this.selectedAdventureId),
+      );
+      button.innerHTML = `
+        <span aria-hidden="true">${
+          this.i18n.locale === "en"
+            ? translated.name.slice(0, 1).toUpperCase()
+            : adventure.motif
+        }</span>
+        <strong>${translated.name}</strong>
+        <small>${adventure.completedCount}/${adventure.stages.length}</small>
+      `;
+      button.addEventListener("click", () => {
+        this.selectedAdventureId = adventure.id;
+        this.render(this.payload);
+      });
+      container.appendChild(button);
+    }
+  }
+
+  renderHeader(adventure) {
+    const translated = this.i18n.adventure(adventure);
+    const elements = this.elements;
+    elements.adventureHeader.dataset.adventure = adventure.id;
+    elements.adventureEmblem.textContent =
+      this.i18n.locale === "en"
+        ? translated.name.slice(0, 1).toUpperCase()
+        : adventure.motif;
+    elements.adventureKicker.textContent = translated.kicker;
+    elements.adventureName.textContent = translated.name;
+    elements.adventureSubtitle.textContent = translated.subtitle;
+    elements.adventureStageMap.setAttribute(
+      "aria-label",
+      this.i18n.t("adventure.mapFor", { studio: translated.name }),
+    );
   }
 
   renderStages(stages) {
@@ -51,7 +105,10 @@ export class AdventureView {
       const button = document.createElement("button");
       button.type = "button";
       button.className = "stage-node";
-      button.classList.toggle("selected", stage.id === this.selectedStageId);
+      button.classList.toggle(
+        "selected",
+        stage.id === this.selectedStageIds.get(this.selectedAdventureId),
+      );
       button.classList.toggle("completed", stage.completed);
       button.classList.toggle("locked", !stage.unlocked);
       button.classList.toggle("boss-stage", stage.bossType !== "small");
@@ -72,7 +129,7 @@ export class AdventureView {
         }</span>
       `;
       button.addEventListener("click", () => {
-        this.selectedStageId = stage.id;
+        this.selectedStageIds.set(this.selectedAdventureId, stage.id);
         this.renderStages(stages);
         this.renderBrief();
       });
@@ -81,8 +138,14 @@ export class AdventureView {
   }
 
   selectedStage() {
-    return this.payload?.adventures[0]?.stages.find(
-      (stage) => stage.id === this.selectedStageId,
+    return this.selectedAdventure()?.stages.find(
+      (stage) => stage.id === this.selectedStageIds.get(this.selectedAdventureId),
+    );
+  }
+
+  selectedAdventure() {
+    return this.payload?.adventures.find(
+      (adventure) => adventure.id === this.selectedAdventureId,
     );
   }
 
@@ -113,7 +176,9 @@ export class AdventureView {
     elements.stageMechanicText.textContent = translated.mechanicText;
     elements.stageRewardCopy.textContent =
       stage.bossType === "small"
-        ? this.i18n.t("adventure.smallReward")
+        ? this.i18n.t("adventure.smallReward", {
+            studio: this.i18n.adventure(this.selectedAdventure()).name,
+          })
         : this.i18n.t("adventure.bossReward", {
             card: this.i18n.card(stage.rewardCards[0]).role,
           });

@@ -256,13 +256,17 @@
       </section>
 
       <section class="view active" id="adventure-view" data-i18n-aria="adventure.label" aria-label="冒险">
-        <header class="adventure-header">
+        <div class="adventure-studio-switcher">
+          <span data-i18n="adventure.chooseStudio">选择片场</span>
+          <div class="studio-tabs" id="adventure-studio-tabs" role="tablist"></div>
+        </div>
+        <header class="adventure-header" id="adventure-header" data-adventure="shaw">
           <div class="adventure-title">
-            <span class="adventure-emblem" data-i18n="adventure.mark" aria-hidden="true">邵</span>
+            <span class="adventure-emblem" id="adventure-emblem" aria-hidden="true">邵</span>
             <div>
-              <span class="section-kicker" data-i18n="adventure.kicker">单机冒险 · 第一片场</span>
-              <h2 data-i18n="adventure.name">邵氏片场</h2>
-              <p data-i18n="adventure.subtitle">刀光、拳影与三十六房</p>
+              <span class="section-kicker" id="adventure-kicker">单机冒险 · 第一片场</span>
+              <h2 id="adventure-name">邵氏片场</h2>
+              <p id="adventure-subtitle">刀光、拳影与三十六房</p>
             </div>
           </div>
           <div class="adventure-progress">
@@ -278,7 +282,7 @@
         </header>
 
         <div class="adventure-layout">
-          <section class="stage-map" data-i18n-aria="adventure.mapAria" aria-label="邵氏冒险关卡">
+          <section class="stage-map" id="adventure-stage-map" aria-label="邵氏冒险关卡">
             <div class="stage-map-heading">
               <div>
                 <span class="section-kicker" data-i18n="adventure.eightActs">八幕连映</span>
@@ -362,11 +366,10 @@
     <script src="./localization/card-describer.js"></script>
     <script src="./localization/log-translator.js"></script>
     <script src="./localization/i18n.js"></script>
-    <script src="./shaw-cards.js"></script>
-    <script src="./shaw-adventure.js"></script>
+    <script src="./card-builders.js"></script>
+    <script src="./studio-registry.js"></script>
     <script src="./starter-cards.js"></script>
     <script src="./expansion-data.js"></script>
-    <script src="./game-data.js"></script>
     <script type="module" src="./app.js"></script>
   </body>
 </html>

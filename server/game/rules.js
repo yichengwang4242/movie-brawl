@@ -6,7 +6,7 @@ const RULES = Object.freeze({
   boardLimit: 7,
   handLimit: 10,
   deckSize: 15,
-  openingHand: Object.freeze({ player: 4, enemy: 3 }),
+  openingHand: Object.freeze({ player: 3, enemy: 3 }),
 });
 
 class GameRuleError extends Error {

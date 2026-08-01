@@ -151,6 +151,18 @@
       };
     }
 
+    adventure(source) {
+      if (!source || this.locale !== "en") return source;
+      const translation = dependencies.adventures[source.id] || {};
+      return {
+        ...source,
+        name: translation.name || source.name,
+        kicker: translation.kicker || source.kicker,
+        subtitle: translation.subtitle || source.subtitle,
+        description: translation.description || source.description,
+      };
+    }
+
     adventureValue(value) {
       if (this.locale !== "en") return value;
       for (const stage of this.adventureData.stages || []) {

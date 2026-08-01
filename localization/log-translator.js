@@ -19,6 +19,33 @@
       "Strength Chamber: enemy characters gain +0/+1.",
     "兵器房训练：头目抽牌并获得 1 点临时戏力。":
       "Weapons Chamber: the boss draws a card and gains 1 temporary Film Power.",
+    "纸扎法坛映出新的替身。": "The paper altar conjures another effigy.",
+    "钟楼敲响，追逐进入险段。": "The clock tower rings as the chase turns dangerous.",
+    "商场特技启动：敌方全体获得 +1 攻击。":
+      "Mall Stunt: all enemy characters gain +1 Attack.",
+    "丛林交叉火力发动。": "Jungle crossfire erupts.",
+    "猛攻式：我方全体角色受到 1 点伤害。":
+      "Assault Form: all friendly characters take 1 damage.",
+    "青春愿望补上一张牌。": "A youthful wish adds another card.",
+    "三线会师：敌方全体获得 +1 攻击。":
+      "Three-Way Convergence: all enemy characters gain +1 Attack.",
+    "卧底暗号直指我方英雄。": "The undercover signal points straight at your hero.",
+    "兄弟接应：头目抽牌并获得 1 点临时戏力。":
+      "Brotherhood Backup: the boss draws a card and gains 1 temporary Film Power.",
+    "英雄本色：敌方全体获得 +1 攻击。":
+      "A Better Brotherhood: all enemy characters gain +1 Attack.",
+    "横财入袋：头目抽 1 张牌。":
+      "Windfall: the boss draws 1 card.",
+    "横财烦恼波及我方英雄。":
+      "Windfall Trouble spills over and damages your hero.",
+    "街头现实压向双方最脆弱的角色。":
+      "Street Reality bears down on each side's most vulnerable character.",
+    "国际动作组完成全场爆破。":
+      "The International Action Unit completes a full-board blast.",
+    "欠账追数：头目抽 2 张牌，敌方全体获得 +1 攻击。":
+      "Debt Collection: the boss draws 2 cards and all enemy characters gain +1 Attack.",
+    "空袭掠过街区，双方阵容受到 1 点伤害。":
+      "An air raid crosses the district. Both boards take 1 damage.",
   };
 
   class LogTranslator {
@@ -94,6 +121,58 @@
           `${this.i18n.entity(role)} takes a place in the Five Venoms Formation.`],
         [/^(.+) 通过金臂横练获得 \+1 攻击。$/, (role) =>
           `${this.i18n.entity(role)} gains +1 Attack from Golden Arm Training.`],
+        [/^(.+) 借铁布衫架势获得 \+0\/\+1。$/, (role) =>
+          `${this.i18n.entity(role)} gains +0/+1 from Iron Shirt Stance.`],
+        [/^(.+) 借醒狮抢青获得 \+1 攻击。$/, (role) =>
+          `${this.i18n.entity(role)} gains +1 Attack from the Lion Dance.`],
+        [/^(.+) 进入截击架势。$/, (role) =>
+          `${this.i18n.entity(role)} enters Intercept Form.`],
+        [/^(.+)触发连拍。$/, (role) =>
+          `${this.i18n.entity(role)} triggers Combo.`],
+        [/^(.+)完成持械特技。$/, (role) =>
+          `${this.i18n.entity(role)} completes an armed Stunt.`],
+        [/^(.+)触发拍档。$/, (role) =>
+          `${this.i18n.entity(role)} triggers Partner.`],
+        [/^(.+)触发剧情反转。$/, (role) =>
+          `${this.i18n.entity(role)} triggers Comeback.`],
+        [/^(.+)转场回到手牌，费用降低 (\d+)。$/, (role, amount) =>
+          `${this.i18n.entity(role)} returns to hand and costs ${amount} less.`],
+        [/^(.+)转场回到手牌，费用增加 (\d+)。$/, (role, amount) =>
+          `${this.i18n.entity(role)} returns to hand and costs ${amount} more.`],
+        [/^(.+)触发独角。$/, (role) =>
+          `${this.i18n.entity(role)} triggers Solo.`],
+        [/^(.+)选择商业线。$/, (role) =>
+          `${this.i18n.entity(role)} selects the Commercial Track.`],
+        [/^(.+)选择创作线。$/, (role) =>
+          `${this.i18n.entity(role)} selects the Creative Track.`],
+        [/^(.+)完成接班。$/, (role) =>
+          `${this.i18n.entity(role)} completes Handover.`],
+        [/^(.+)完成警署轮班，获得 \+1 攻击。$/, (role) =>
+          `${this.i18n.entity(role)} completes the police shift and gains +1 Attack.`],
+        [/^(.+)守住家当，获得 \+0\/\+1。$/, (role) =>
+          `${this.i18n.entity(role)} protects the family savings and gains +0/+1.`],
+        [/^(.+)被证物争夺拖住。$/, (role) =>
+          `${this.i18n.entity(role)} is held up by the evidence struggle.`],
+        [/^(.+)得到异乡照应，获得 \+1\/\+1。$/, (role) =>
+          `${this.i18n.entity(role)} receives support abroad and gains +1/+1.`],
+        [/^唐人街邻里为头目恢复 (\d+) 点生命。$/, (amount) =>
+          `The Chinatown Neighbors restore ${amount} Health to the boss.`],
+        [/^(.+)获得专业护具。$/, (role) =>
+          `${this.i18n.entity(role)} receives professional protective gear.`],
+        [/^战时补给：头目抽牌并恢复 (\d+) 点生命。$/, (amount) =>
+          `Wartime Supplies: the boss draws a card and restores ${amount} Health.`],
+        [/^(.+)陷入阴阳错位，失去 1 点攻击。$/, (role) =>
+          `${this.i18n.entity(role)} is misdirected and loses 1 Attack.`],
+        [/^还魂倩影恢复 (\d+) 点生命。$/, (amount) =>
+          `The Returning Spirit restores ${amount} Health.`],
+        [/^(.+)接上拍档配合，获得 \+1\/\+1。$/, (role) =>
+          `${this.i18n.entity(role)} links up with a Partner and gains +1/+1.`],
+        [/^(.+)实现护身愿望。$/, (role) =>
+          `${this.i18n.entity(role)} receives a protective wish.`],
+        [/^(.+)收到假暗号，失去 1 点攻击。$/, (role) =>
+          `${this.i18n.entity(role)} receives a false signal and loses 1 Attack.`],
+        [/^(.+)被强制转仓，费用增加 1。$/, (role) =>
+          `${this.i18n.entity(role)} is transferred to hand and costs 1 more.`],
         [/^白莲法坛恢复 (\d+) 点生命。$/, (amount) =>
           `The White Lotus Altar restores ${amount} Health.`],
       ];

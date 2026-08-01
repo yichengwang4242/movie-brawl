@@ -6,47 +6,10 @@ const path = require("node:path");
 const { GameService } = require("./server/game-service.js");
 const { GameRuleError } = require("./server/game-engine.js");
 const { AdventureService } = require("./server/adventure/adventure-service.js");
-const { JsonProfileRepository } = require("./server/adventure/profile-repository.js");
-
-const host = process.env.HOST || "127.0.0.1";
-const port = Number(process.env.PORT || 4173);
-const root = __dirname;
-const adventures = new AdventureService({
-  repository: new JsonProfileRepository(path.join(root, "data", "profile.json")),
-});
-const service = new GameService({ adventureService: adventures });
-
-const staticFiles = new Map([
-  ["/", ["index.html", "text/html; charset=utf-8"]],
-  ["/index.html", ["index.html", "text/html; charset=utf-8"]],
-  ["/styles.css", ["styles.css", "text/css; charset=utf-8"]],
-  ["/app.js", ["app.js", "text/javascript; charset=utf-8"]],
-  ["/localization/entities.js", ["localization/entities.js", "text/javascript; charset=utf-8"]],
-  ["/localization/movies.js", ["localization/movies.js", "text/javascript; charset=utf-8"]],
-  ["/localization/adventures.js", ["localization/adventures.js", "text/javascript; charset=utf-8"]],
-  ["/localization/messages.js", ["localization/messages.js", "text/javascript; charset=utf-8"]],
-  ["/localization/card-describer.js", ["localization/card-describer.js", "text/javascript; charset=utf-8"]],
-  ["/localization/log-translator.js", ["localization/log-translator.js", "text/javascript; charset=utf-8"]],
-  ["/localization/i18n.js", ["localization/i18n.js", "text/javascript; charset=utf-8"]],
-  ["/game-data.js", ["game-data.js", "text/javascript; charset=utf-8"]],
-  ["/expansion-data.js", ["expansion-data.js", "text/javascript; charset=utf-8"]],
-  ["/shaw-cards.js", ["shaw-cards.js", "text/javascript; charset=utf-8"]],
-  ["/shaw-adventure.js", ["shaw-adventure.js", "text/javascript; charset=utf-8"]],
-  ["/starter-cards.js", ["starter-cards.js", "text/javascript; charset=utf-8"]],
-  ["/favicon.svg", ["favicon.svg", "image/svg+xml"]],
-  ["/assets/shaw-studio-stage.png", ["assets/shaw-studio-stage.png", "image/png"]],
-  ["/client/elements.js", ["client/elements.js", "text/javascript; charset=utf-8"]],
-  ["/client/i18n.js", ["client/i18n.js", "text/javascript; charset=utf-8"]],
-  ["/client/playability-feedback.js", ["client/playability-feedback.js", "text/javascript; charset=utf-8"]],
-  ["/client/game-api-client.js", ["client/game-api-client.js", "text/javascript; charset=utf-8"]],
-  ["/client/card-renderer.js", ["client/card-renderer.js", "text/javascript; charset=utf-8"]],
-  ["/client/battle-view.js", ["client/battle-view.js", "text/javascript; charset=utf-8"]],
-  ["/client/collection-view.js", ["client/collection-view.js", "text/javascript; charset=utf-8"]],
-  ["/client/feedback-view.js", ["client/feedback-view.js", "text/javascript; charset=utf-8"]],
-  ["/client/game-controller.js", ["client/game-controller.js", "text/javascript; charset=utf-8"]],
-  ["/client/adventure-view.js", ["client/adventure-view.js", "text/javascript; charset=utf-8"]],
-  ["/client/outcome-view.js", ["client/outcome-view.js", "text/javascript; charset=utf-8"]],
-]);
+const {
+  JsonProfileRepository,
+} = require("./server/adventure/profile-repository.js");
+const { StaticFileCatalog } = require("./server/static-file-catalog.js");
 
 function sendJson(response, status, body) {
   response.writeHead(status, {
@@ -73,13 +36,12 @@ async function readJson(request) {
   }
 }
 
-async function serveStatic(response, pathname) {
-  const entry = staticFiles.get(pathname);
+async function serveStatic(response, pathname, staticFiles) {
+  const entry = staticFiles.resolve(pathname);
   if (!entry) return false;
-  const [filename, contentType] = entry;
-  const content = await readFile(path.join(root, filename));
+  const content = await readFile(entry.filename);
   response.writeHead(200, {
-    "Content-Type": contentType,
+    "Content-Type": entry.contentType,
     "Cache-Control": "no-cache",
     "X-Content-Type-Options": "nosniff",
   });
@@ -87,7 +49,8 @@ async function serveStatic(response, pathname) {
   return true;
 }
 
-async function handleApi(request, response, pathname) {
+async function handleApi(request, response, pathname, services) {
+  const { adventures, games } = services;
   if (request.method === "GET" && pathname === "/api/health") {
     sendJson(response, 200, { ok: true, service: "movie-brawl", version: 1 });
     return true;
@@ -112,7 +75,7 @@ async function handleApi(request, response, pathname) {
     sendJson(
       response,
       201,
-      service.create({
+      games.create({
         seed: body.seed,
         difficulty: body.difficulty,
         stageId: body.stageId,
@@ -123,21 +86,28 @@ async function handleApi(request, response, pathname) {
 
   const gameRoute = pathname.match(/^\/api\/games\/([a-f0-9-]+)$/);
   if (request.method === "GET" && gameRoute) {
-    const game = service.get(gameRoute[1]);
+    const game = games.get(gameRoute[1]);
     if (!game) {
-      sendJson(response, 404, { error: "GAME_NOT_FOUND", message: "这局游戏不存在或已经过期。" });
+      sendJson(response, 404, {
+        error: "GAME_NOT_FOUND",
+        message: "这局游戏不存在或已经过期。",
+      });
     } else {
       sendJson(response, 200, game);
     }
     return true;
   }
 
-  const actionRoute = pathname.match(/^\/api\/games\/([a-f0-9-]+)\/actions$/);
+  const actionRoute = pathname.match(
+    /^\/api\/games\/([a-f0-9-]+)\/actions$/,
+  );
   if (request.method === "POST" && actionRoute) {
-    const body = await readJson(request);
-    const game = service.act(actionRoute[1], body);
+    const game = games.act(actionRoute[1], await readJson(request));
     if (!game) {
-      sendJson(response, 404, { error: "GAME_NOT_FOUND", message: "这局游戏不存在或已经过期。" });
+      sendJson(response, 404, {
+        error: "GAME_NOT_FOUND",
+        message: "这局游戏不存在或已经过期。",
+      });
     } else {
       sendJson(response, 200, game);
     }
@@ -147,30 +117,75 @@ async function handleApi(request, response, pathname) {
   return false;
 }
 
-const server = http.createServer(async (request, response) => {
-  try {
-    const url = new URL(request.url, `http://${request.headers.host || `${host}:${port}`}`);
-    if (url.pathname.startsWith("/api/")) {
-      const handled = await handleApi(request, response, url.pathname);
-      if (!handled) sendJson(response, 404, { error: "NOT_FOUND", message: "接口不存在。" });
-      return;
-    }
+function createMovieBrawlServer(options = {}) {
+  const root = options.root || __dirname;
+  const adventures =
+    options.adventureService ||
+    new AdventureService({
+      repository:
+        options.profileRepository ||
+        new JsonProfileRepository(path.join(root, "data", "profile.json")),
+    });
+  const games = options.gameService || new GameService({
+    adventureService: adventures,
+  });
+  const staticFiles = options.staticFiles || new StaticFileCatalog(root);
+  const services = { adventures, games };
 
-    const handled = await serveStatic(response, url.pathname);
-    if (!handled) {
-      response.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
-      response.end("Not found");
-    }
-  } catch (error) {
-    if (error instanceof GameRuleError) {
-      sendJson(response, 400, { error: error.code, message: error.message });
-      return;
-    }
-    console.error(error);
-    sendJson(response, 500, { error: "INTERNAL_ERROR", message: "片场暂时出了问题。" });
-  }
-});
+  return http.createServer(async (request, response) => {
+    try {
+      const url = new URL(
+        request.url,
+        `http://${request.headers.host || "127.0.0.1"}`,
+      );
+      if (url.pathname.startsWith("/api/")) {
+        const handled = await handleApi(
+          request,
+          response,
+          url.pathname,
+          services,
+        );
+        if (!handled) {
+          sendJson(response, 404, {
+            error: "NOT_FOUND",
+            message: "接口不存在。",
+          });
+        }
+        return;
+      }
 
-server.listen(port, host, () => {
-  console.log(`电影大乱斗已启动：http://${host}:${port}`);
-});
+      if (!(await serveStatic(response, url.pathname, staticFiles))) {
+        response.writeHead(404, {
+          "Content-Type": "text/plain; charset=utf-8",
+        });
+        response.end("Not found");
+      }
+    } catch (error) {
+      if (error instanceof GameRuleError) {
+        sendJson(response, 400, { error: error.code, message: error.message });
+        return;
+      }
+      console.error(error);
+      sendJson(response, 500, {
+        error: "INTERNAL_ERROR",
+        message: "片场暂时出了问题。",
+      });
+    }
+  });
+}
+
+if (require.main === module) {
+  const host = process.env.HOST || "127.0.0.1";
+  const port = Number(process.env.PORT || 4173);
+  createMovieBrawlServer().listen(port, host, () => {
+    console.log(`电影大乱斗已启动：http://${host}:${port}`);
+  });
+}
+
+module.exports = {
+  createMovieBrawlServer,
+  handleApi,
+  readJson,
+  sendJson,
+  serveStatic,
+};

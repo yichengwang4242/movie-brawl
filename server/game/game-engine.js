@@ -145,7 +145,8 @@ class GameEngine {
     }
 
     player.mana -= card.cost;
-    player.hand.splice(handIndex, 1);
+    this.state.zones.removeFromHand(side, card.instanceId);
+    player.cardsPlayedThisTurn += 1;
     this.state.addLog(
       `${sideName(side)}打出 ${card.role}。`,
       side === "player" ? "player" : "enemy",
@@ -159,6 +160,7 @@ class GameEngine {
       this.effects.resolve(card.effects, { side, self: card });
     } else {
       this.effects.resolve(card.effects, { side, self: null });
+      this.state.zones.moveToGraveyard(side, card, "spell-resolved");
     }
 
     this.deaths.resolve();
@@ -171,15 +173,15 @@ class GameEngine {
       card.attacksRemaining = 1;
       card.attackRestriction = "minions";
     }
-    this.players[side].board.push(card);
+    this.state.zones.addToBoard(side, card);
   }
 
   equipWeapon(side, card) {
     const player = this.players[side];
-    if (player.weapon) {
-      this.state.addLog(`${player.weapon.role} 被替换。`, "weapon");
+    const replaced = this.state.zones.equipWeapon(side, card);
+    if (replaced) {
+      this.state.addLog(`${replaced.role} 被替换。`, "weapon");
     }
-    player.weapon = card;
     if (!player.heroAttackUsedThisTurn) player.heroAttacksRemaining = 1;
     this.state.addLog(
       `${sideName(side)}装备 ${card.role}（${card.currentAttack}/${card.currentDurability}）。`,

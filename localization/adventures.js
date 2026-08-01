@@ -8,9 +8,31 @@
   return {
     shaw: {
       name: "Shaw Studio",
+      kicker: "Solo Adventure · Studio One",
       subtitle: "Blades, fists, and the Thirty-Six Chambers",
       description:
         "Eight classic martial-arts trials where boss rules and card combinations matter more than oversized rewards.",
+    },
+    "golden-harvest": {
+      name: "Golden Harvest Studio",
+      kicker: "Solo Adventure · Studio Two",
+      subtitle: "Fists, stunts, and the golden age of action comedy",
+      description:
+        "Eight Golden Harvest action classics. Encounter rules create the challenge while reward cards stay at normal deck-building power.",
+    },
+    "cinema-city": {
+      name: "Cinema City Studio",
+      kicker: "Solo Adventure · Studio Three",
+      subtitle: "Caper tricks, perfect partners, and story reversals",
+      description:
+        "Eight Cinema City genre adventures built around Partner, Comeback, and clever returns to hand.",
+    },
+    "d-and-b": {
+      name: "D & B Studio",
+      kicker: "Solo Adventure · Studio Four",
+      subtitle: "Urban creativity and professional action on two tracks",
+      description:
+        "Eight D & B film adventures. Read the board with Solo, Two-Track, and Handover while shifting between commercial genre craft and creative drama.",
     },
     stages: {
       "shaw-01-inn": {
@@ -68,6 +90,174 @@
         mechanicTitle: "Chamber-by-Chamber Training",
         mechanicText:
           "Cycle through Wooden Dummy, Strength, and Weapons training to summon defenders, increase Health, and draw cards.",
+      },
+      "golden-harvest-01-factory": {
+        title: "The Ice Factory",
+        bossName: "Boss Mi",
+        mechanicTitle: "Factory Blockade",
+        mechanicText:
+          "At the start of the boss turn, summon a 2/1 Ice Factory Enforcer if the enemy board is empty.",
+      },
+      "golden-harvest-02-spooky": {
+        title: "Paper Altar",
+        bossName: "Sorcerer Chin",
+        mechanicTitle: "Borrowed Spirit",
+        mechanicText:
+          "Every second boss turn, the altar summons a 1/1 Paper Effigy.",
+      },
+      "golden-harvest-03-project-a": {
+        title: "Clock Tower Chase",
+        bossName: "Dragon Ma",
+        mechanicTitle: "Clock Tower Drop",
+        mechanicText:
+          "Every third boss turn, deal 1 damage to all your characters. If you control none, damage your hero instead.",
+      },
+      "golden-harvest-04-lucky-stars": {
+        title: "Lucky Stars in Action",
+        bossName: "Stone-Faced Killer",
+        mechanicTitle: "Lucky Stars Relay",
+        mechanicText:
+          "At the start of the boss turn, summon a 1/1 Lucky Star Partner if the enemy board has fewer than three characters.",
+      },
+      "golden-harvest-05-police-story": {
+        title: "Mall Pursuit",
+        bossName: "Chan Ka-kui",
+        mechanicTitle: "Mall Stunt",
+        mechanicText:
+          "The first time the boss falls to 18 Health or less, all enemy characters gain +1 Attack and a 2/2 Rush officer joins them.",
+      },
+      "golden-harvest-06-condors": {
+        title: "Jungle Raid",
+        bossName: "The General",
+        mechanicTitle: "Crossfire",
+        mechanicText:
+          "Every second boss turn, deal 1 damage to your highest-Attack character. With an empty board, summon an Assault Trooper.",
+      },
+      "golden-harvest-07-lion": {
+        title: "Lion Dance Arena",
+        bossName: "Yim Chun-tung",
+        mechanicTitle: "Lion Dance High-Pole",
+        mechanicText:
+          "Every second boss turn, an enemy character gains +1 Attack. If none are present, summon a 2/1 Rush Lion Dancer.",
+      },
+      "golden-harvest-08-colosseum": {
+        title: "The Colosseum",
+        bossName: "Tang Lung",
+        mechanicTitle: "Three Jeet Kune Do Forms",
+        mechanicText:
+          "Cycle through Probe, Intercept, and Assault to summon a Rush fighter, increase Attack, then deal 1 damage to all your characters.",
+      },
+      "cinema-city-01-clues": {
+        title: "The Mastermind's Game",
+        bossName: "The House Dealer",
+        mechanicTitle: "Striving Room Brainstorm",
+        mechanicText:
+          "At the start of the boss turn, summon a 1/1 Striving Room Partner if the enemy board has fewer than two characters.",
+      },
+      "cinema-city-02-yinyang": {
+        title: "Mortal and Spirit Missteps",
+        bossName: "Returning Spirit",
+        mechanicTitle: "Yin-Yang Misdirection",
+        mechanicText:
+          "Every second boss turn, a random friendly character loses 1 Attack. With an empty board, the boss restores 1 Health.",
+      },
+      "cinema-city-03-aces": {
+        title: "The Great Diamond Chase",
+        bossName: "King Kong",
+        mechanicTitle: "Perfect Partners",
+        mechanicText:
+          "With fewer than two enemy characters, summon a 2/1 Hi-Tech Partner. Otherwise, an enemy character gains +1/+1.",
+      },
+      "cinema-city-04-happy-ghost": {
+        title: "A Night of Schoolyard Wishes",
+        bossName: "Happy Ghost",
+        mechanicTitle: "Youthful Wishes",
+        mechanicText:
+          "Cycle through three wishes: summon a Happy Classmate, grant Shield, then draw a card.",
+      },
+      "cinema-city-05-opera": {
+        title: "Three Threads on One Stage",
+        bossName: "Tsao Wan",
+        mechanicTitle: "Three-Way Convergence",
+        mechanicText:
+          "While the enemy controls fewer than three characters, summon a 1/1 Opera Companion. At three, all enemies gain +1 Attack.",
+      },
+      "cinema-city-06-city-on-fire": {
+        title: "The Rooftop Undercover Game",
+        bossName: "Fu",
+        mechanicTitle: "Undercover Signal",
+        mechanicText:
+          "Every second boss turn, your highest-Attack character loses 1 Attack. With an empty board, your hero takes 1 damage.",
+      },
+      "cinema-city-07-prison": {
+        title: "Prison Roll Call",
+        bossName: "Officer Scarface",
+        mechanicTitle: "Forced Transfer",
+        mechanicText:
+          "Every third boss turn, return your lowest-Health character to your hand and increase its Cost by 1.",
+      },
+      "cinema-city-08-heroic": {
+        title: "A Heroic Night at the Docks",
+        bossName: "Sung Tse-ho",
+        mechanicTitle: "A Better Brotherhood",
+        mechanicText:
+          "Cycle through summoning a Brotherhood Partner, drawing with temporary Film Power, and granting all enemies +1 Attack.",
+      },
+      "d-and-b-01-pom-pom": {
+        title: "The Bungled Patrol",
+        bossName: "Ah Chau and Beethoven",
+        mechanicTitle: "Police Shift",
+        mechanicText:
+          "On odd boss turns, add a Patrol Officer. On even turns, an enemy character gains +1 Attack.",
+      },
+      "d-and-b-02-fortune": {
+        title: "Windfall at the Estate",
+        bossName: "The Bill Family",
+        mechanicTitle: "Three Beats of Fortune",
+        mechanicText:
+          "Cycle through winning, protecting the windfall, and new trouble: the boss draws, increases a character's Health, then deals 1 damage to your hero.",
+      },
+      "d-and-b-03-yes-madam": {
+        title: "The Microfilm Case",
+        bossName: "Inspector Ng",
+        mechanicTitle: "Evidence Scramble",
+        mechanicText:
+          "When the enemy board is not ahead, summon a 2/1 Royal Inspector. When it is ahead, Stun a random friendly character.",
+      },
+      "d-and-b-04-lunatics": {
+        title: "Street Outreach",
+        bossName: "Mr Tsui",
+        mechanicTitle: "Street Reality",
+        mechanicText:
+          "Every second boss turn, each side's lowest-Health character takes 1 damage. With an empty friendly board, your hero takes the damage.",
+      },
+      "d-and-b-05-autumn": {
+        title: "Autumn in Chinatown",
+        bossName: "Samuel Pang",
+        mechanicTitle: "Far-from-Home Support",
+        mechanicText:
+          "With an empty enemy board, summon a Chinatown Neighbor. A lone enemy gains +1/+1; a wider board restores 1 boss Health.",
+      },
+      "d-and-b-06-warriors": {
+        title: "The Frontier Escort",
+        bossName: "Ming-ming",
+        mechanicTitle: "International Action Unit",
+        mechanicText:
+          "Cycle through summoning a Rush operative, granting Shield, then dealing 1 damage to all your characters.",
+      },
+      "d-and-b-07-last-victory": {
+        title: "One Last Game in Mong Kok",
+        bossName: "Hung",
+        mechanicTitle: "Debt Collection",
+        mechanicText:
+          "The first time the boss falls to 18 Health or less, draw two cards and give all enemy characters +1 Attack.",
+      },
+      "d-and-b-08-dawn": {
+        title: "Waiting Through the War",
+        bossName: "Yip Kim-fai",
+        mechanicTitle: "Three Wartime Acts",
+        mechanicText:
+          "Cycle through resistance, air raid, and rations: summon a Taunt defender, damage both boards, then draw and restore Health.",
       },
     },
   };

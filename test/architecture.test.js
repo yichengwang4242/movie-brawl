@@ -22,16 +22,24 @@ const clientModules = [
   "client/game-controller.js",
 ];
 const gameModules = [
+  "card-builders.js",
+  "studio-registry.js",
+  "server.js",
+  "server/static-file-catalog.js",
   "server/game-engine.js",
   "server/game/rules.js",
   "server/game/random-source.js",
   "server/game/card-factory.js",
+  "server/game/card-zone-manager.js",
   "server/game/game-state.js",
   "server/game/combat-resolver.js",
   "server/game/effect-resolver.js",
   "server/game/ai-director.js",
   "server/game/death-resolver.js",
   "server/game/advanced-effect-handlers.js",
+  "server/game/cinema-city-effect-handlers.js",
+  "server/game/d-and-b-effect-handlers.js",
+  "server/game/effect-handler-extensions.js",
   "server/game/ai/ai-strategy.js",
   "server/game/ai/easy-ai-strategy.js",
   "server/game/ai/normal-ai-strategy.js",
@@ -39,9 +47,16 @@ const gameModules = [
   "server/game/game-serializer.js",
   "server/game/game-engine.js",
   "server/adventure/profile-repository.js",
+  "server/adventure/profile-schema.js",
   "server/adventure/adventure-catalog.js",
   "server/adventure/adventure-service.js",
   "server/adventure/boss-encounter.js",
+  "server/adventure/encounter-rule-registry.js",
+  "server/adventure/shaw-encounter-rules.js",
+  "server/adventure/golden-harvest-encounter-rules.js",
+  "server/adventure/cinema-city-encounter-rules.js",
+  "server/adventure/d-and-b-encounter-rules.js",
+  "server/content/card-id-contract.js",
   "localization/card-describer.js",
   "localization/log-translator.js",
   "localization/i18n.js",
@@ -91,6 +106,8 @@ test("游戏入口保持为薄兼容层，业务类不重新堆回单一大文�
 
 test("核心职责由独立类承载", () => {
   const expectedClasses = new Map([
+    ["studio-registry.js", "StudioRegistry"],
+    ["server/static-file-catalog.js", "StaticFileCatalog"],
     ["client/game-controller.js", "GameController"],
     ["client/battle-view.js", "BattleView"],
     ["client/card-renderer.js", "CardRenderer"],
@@ -99,11 +116,15 @@ test("核心职责由独立类承载", () => {
     ["client/playability-feedback.js", "PlayabilityFeedback"],
     ["server/game/game-engine.js", "GameEngine"],
     ["server/game/game-state.js", "GameState"],
+    ["server/game/card-zone-manager.js", "CardZoneManager"],
     ["server/game/combat-resolver.js", "CombatResolver"],
     ["server/game/effect-resolver.js", "EffectResolver"],
     ["server/game/ai-director.js", "AiDirector"],
     ["server/game/death-resolver.js", "DeathResolver"],
     ["server/game/advanced-effect-handlers.js", "AdvancedEffectHandlers"],
+    ["server/game/cinema-city-effect-handlers.js", "CinemaCityEffectHandlers"],
+    ["server/game/d-and-b-effect-handlers.js", "DandBEffectHandlers"],
+    ["server/game/effect-handler-extensions.js", "EffectHandlerExtensions"],
     ["server/game/ai/easy-ai-strategy.js", "EasyAiStrategy"],
     ["server/game/ai/normal-ai-strategy.js", "NormalAiStrategy"],
     ["server/game/ai/hard-ai-strategy.js", "HardAiStrategy"],
@@ -111,6 +132,11 @@ test("核心职责由独立类承载", () => {
     ["server/adventure/adventure-catalog.js", "AdventureCatalog"],
     ["server/adventure/adventure-service.js", "AdventureService"],
     ["server/adventure/boss-encounter.js", "BossEncounter"],
+    ["server/adventure/encounter-rule-registry.js", "EncounterRuleRegistry"],
+    ["server/adventure/shaw-encounter-rules.js", "ShawEncounterRules"],
+    ["server/adventure/golden-harvest-encounter-rules.js", "GoldenHarvestEncounterRules"],
+    ["server/adventure/cinema-city-encounter-rules.js", "CinemaCityEncounterRules"],
+    ["server/adventure/d-and-b-encounter-rules.js", "DandBEncounterRules"],
     ["localization/card-describer.js", "CardDescriber"],
     ["localization/log-translator.js", "LogTranslator"],
     ["localization/i18n.js", "I18n"],
@@ -118,5 +144,16 @@ test("核心职责由独立类承载", () => {
 
   for (const [relativePath, className] of expectedClasses) {
     assert.match(source(relativePath), new RegExp(`class ${className}\\b`));
+  }
+});
+
+test("墓地、烧毁区和放逐区只由区域管理类写入", () => {
+  for (const relativePath of gameModules) {
+    if (relativePath === "server/game/card-zone-manager.js") continue;
+    assert.doesNotMatch(
+      source(relativePath),
+      /\.(graveyard|burned|exiled)\.push\(/,
+      `${relativePath} 不应绕过 CardZoneManager 写入卡牌区域`,
+    );
   }
 });

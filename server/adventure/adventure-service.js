@@ -35,6 +35,11 @@ class AdventureService {
     if (this.pendingReward(profile)) {
       throw new GameRuleError("REWARD_PENDING", "请先领取上一关奖励。");
     }
+    const ownedCards = this.catalog.cards(profile.ownedCardIds);
+    const playerBonusCards = [
+      ...ownedCards.filter((card) => card.adventure === match.adventure.id),
+      ...ownedCards.filter((card) => card.adventure !== match.adventure.id),
+    ];
 
     return {
       seed,
@@ -46,8 +51,8 @@ class AdventureService {
             : "hard",
       enemyName: match.stage.bossName,
       enemyHealth: match.stage.health,
-      enemyDeck: this.catalog.buildEnemyDeck(match.stage, seed),
-      playerBonusCards: this.catalog.cards(profile.ownedCardIds),
+      enemyDeck: this.catalog.buildEnemyDeck(match.adventure, match.stage, seed),
+      playerBonusCards,
       encounter: match.stage,
     };
   }

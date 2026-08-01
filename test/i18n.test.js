@@ -4,6 +4,9 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const cardPool = require("../game-data.js");
 const shawAdventure = require("../shaw-adventure.js");
+const goldenHarvestAdventure = require("../golden-harvest-adventure.js");
+const cinemaCityAdventure = require("../cinema-city-adventure.js");
+const dandBAdventure = require("../d-and-b-adventure.js");
 const messages = require("../localization/messages.js");
 const { I18n } = require("../localization/i18n.js");
 const {
@@ -20,7 +23,14 @@ const {
 const HAN = /\p{Script=Han}/u;
 
 function englishI18n() {
-  return new I18n(cardPool, shawAdventure, {
+  return new I18n(cardPool, {
+    stages: [
+      ...shawAdventure.stages,
+      ...goldenHarvestAdventure.stages,
+      ...cinemaCityAdventure.stages,
+      ...dandBAdventure.stages,
+    ],
+  }, {
     locale: "en",
     storage: null,
   });
@@ -60,9 +70,15 @@ test("全部卡牌字段与技能在英文模式下均有英文展示", () => {
   }
 });
 
-test("邵氏八关的片名、头目和场地机制均有英文版本", () => {
+test("四个片场三十二关的片名、头目和场地机制均有英文版本", () => {
   const i18n = englishI18n();
-  for (const source of shawAdventure.stages) {
+  const stages = [
+    ...shawAdventure.stages,
+    ...goldenHarvestAdventure.stages,
+    ...cinemaCityAdventure.stages,
+    ...dandBAdventure.stages,
+  ];
+  for (const source of stages) {
     const stage = i18n.stage(source);
     for (const key of [
       "movie",
@@ -80,30 +96,37 @@ test("邵氏八关的片名、头目和场地机制均有英文版本", () => {
   }
 });
 
-test("八种头目机制的首回合战报可以完整显示为英文", () => {
+test("三十二种头目机制的首回合战报可以完整显示为英文", () => {
   const i18n = englishI18n();
-  shawAdventure.stages.forEach((stage, index) => {
-    const previous = shawAdventure.stages.slice(0, index);
-    const profile = {
-      schemaVersion: 1,
-      completedStageIds: previous.map((candidate) => candidate.id),
-      claimedStageIds: previous.map((candidate) => candidate.id),
-      ownedCardIds: previous.map((candidate) => candidate.rewardCardIds[0]),
-    };
-    const adventures = new AdventureService({
-      repository: new MemoryProfileRepository(profile),
-    });
-    const game = createGame(adventures.createGameOptions(stage.id, 140 + index));
-    performAction(game, { type: "END_TURN" });
+  for (const adventure of [
+    shawAdventure,
+    goldenHarvestAdventure,
+    cinemaCityAdventure,
+    dandBAdventure,
+  ]) {
+    adventure.stages.forEach((stage, index) => {
+      const previous = adventure.stages.slice(0, index);
+      const profile = {
+        schemaVersion: 1,
+        completedStageIds: previous.map((candidate) => candidate.id),
+        claimedStageIds: previous.map((candidate) => candidate.id),
+        ownedCardIds: previous.map((candidate) => candidate.rewardCardIds[0]),
+      };
+      const adventures = new AdventureService({
+        repository: new MemoryProfileRepository(profile),
+      });
+      const game = createGame(adventures.createGameOptions(stage.id, 140 + index));
+      performAction(game, { type: "END_TURN" });
 
-    for (const entry of game.logs) {
-      assert.doesNotMatch(
-        i18n.log(entry),
-        HAN,
-        `${stage.id} 战报尚未翻译：${entry.message}`,
-      );
-    }
-  });
+      for (const entry of game.logs) {
+        assert.doesNotMatch(
+          i18n.log(entry),
+          HAN,
+          `${stage.id} 战报尚未翻译：${entry.message}`,
+        );
+      }
+    });
+  }
 });
 
 test("动态战斗战报模板覆盖卡牌、武器、亡语和疲劳事件", () => {
@@ -119,6 +142,11 @@ test("动态战斗战报模板覆盖卡牌、武器、亡语和疲劳事件", ()
     "陈家驹 的亡语触发。",
     "影迷牌库见底，受到 3 点疲劳伤害。",
     "至尊宝与陈家驹融合为 银幕双雄。",
+    "冰厂工友触发连拍。",
+    "战地队员完成持械特技。",
+    "吴阿秋触发独角。",
+    "骠叔选择商业线。",
+    "贝多芬完成接班。",
   ];
   for (const message of samples) {
     assert.doesNotMatch(

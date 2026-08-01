@@ -6,3 +6,4 @@ coverage/
 *.log
 data/profile.json
 data/profile.json.tmp
+data/profile.json.invalid-*

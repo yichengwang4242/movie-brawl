@@ -217,8 +217,8 @@ class CombatResolver {
       player.heroAttackUsedThisTurn = true;
       player.weapon.currentDurability -= 1;
       if (player.weapon.currentDurability <= 0) {
-        this.state.addLog(`${player.weapon.role} 耐久耗尽。`, "weapon");
-        player.weapon = null;
+        const broken = this.state.zones.destroyWeapon(side, "weapon-broken");
+        this.state.addLog(`${broken.role} 耐久耗尽。`, "weapon");
       }
       this.deaths.resolve();
     } finally {

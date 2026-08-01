@@ -1,19 +1,22 @@
 "use strict";
 
 const { RULES, sideName } = require("./rules.js");
+const { CardZoneManager } = require("./card-zone-manager.js");
 
 class GameState {
   constructor() {
-    this.schemaVersion = 1;
+    this.schemaVersion = 2;
     this.version = 1;
     this.phase = "playing";
     this.winner = null;
     this.turn = 1;
     this.activeSide = "player";
     this.eventCounter = 0;
+    this.zoneEventCounter = 0;
     this.deferGameOver = false;
     this.logs = [];
     this.players = {};
+    this.zones = new CardZoneManager(this);
   }
 
   initialize(cardFactory, options = {}) {
@@ -44,7 +47,11 @@ class GameState {
       weapon: null,
       heroAttacksRemaining: 0,
       heroAttackUsedThisTurn: false,
+      cardsPlayedThisTurn: 0,
+      charactersLostThisTurn: 0,
       graveyard: [],
+      burned: [],
+      exiled: [],
       deck,
       deckRecipe: deck.map((card) => ({
         id: card.id,
@@ -90,15 +97,16 @@ class GameState {
         continue;
       }
 
-      const card = cardFactory.createInstance(player.deck.shift());
+      const card = this.zones.drawTop(side, cardFactory);
       if (player.hand.length >= RULES.handLimit) {
+        this.zones.moveToBurned(side, card, "hand-full");
         if (!options.silent) {
           this.addLog(`${sideName(side)}手牌已满，${card.role} 被弃置。`, "warning");
         }
         continue;
       }
 
-      player.hand.push(card);
+      this.zones.addToHand(side, card);
       if (!options.silent) this.addLog(`${sideName(side)}抽到一张牌。`);
     }
   }
@@ -110,6 +118,8 @@ class GameState {
     player.mana = player.maxMana;
     player.heroAttackUsedThisTurn = false;
     player.heroAttacksRemaining = player.weapon ? 1 : 0;
+    player.cardsPlayedThisTurn = 0;
+    player.charactersLostThisTurn = 0;
 
     for (const card of player.board) {
       card.attackRestriction = null;
@@ -134,18 +144,7 @@ class GameState {
   }
 
   takeDeadCards() {
-    const fallenCards = [];
-    for (const side of ["player", "enemy"]) {
-      const player = this.player(side);
-      const fallen = player.board.filter((card) => card.currentHealth <= 0);
-      for (const card of fallen) {
-        this.addLog(`${card.role} 退场。`, "damage");
-        player.graveyard.push(card.id);
-        fallenCards.push({ side, card });
-      }
-      player.board = player.board.filter((card) => card.currentHealth > 0);
-    }
-    return fallenCards;
+    return this.zones.takeDeadCards();
   }
 
   cleanupBoards() {

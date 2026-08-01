@@ -1,7 +1,9 @@
 "use strict";
 
 const { RULES, GameRuleError, otherSide, sideName } = require("./rules.js");
-const { AdvancedEffectHandlers } = require("./advanced-effect-handlers.js");
+const {
+  EffectHandlerExtensions,
+} = require("./effect-handler-extensions.js");
 
 class EffectResolver {
   constructor(state, cardFactory, combat, deathResolver) {
@@ -29,11 +31,10 @@ class EffectResolver {
       ["rushAllFriendly", this.rushAllFriendly.bind(this)],
       ["stunRandomEnemy", this.stunRandomEnemy.bind(this)],
       ["addRandomNeutral", this.addRandomNeutral.bind(this)],
+      ["combo", this.combo.bind(this)],
+      ["whileArmed", this.whileArmed.bind(this)],
     ]);
-    const advanced = new AdvancedEffectHandlers(state, cardFactory);
-    for (const [type, handler] of advanced.registry()) {
-      this.handlers.set(type, handler);
-    }
+    new EffectHandlerExtensions(this, state, cardFactory).register(this.handlers);
   }
 
   resolve(effects, context, options = {}) {
@@ -205,7 +206,7 @@ class EffectResolver {
         token.attacksRemaining = 1;
         token.attackRestriction = "minions";
       }
-      owner.board.push(token);
+      this.state.zones.addToBoard(context.side, token);
       this.state.addLog(
         `${sideName(context.side)}召唤了 ${token.role}。`,
         "summon",
@@ -260,9 +261,26 @@ class EffectResolver {
     const owner = this.state.player(context.side);
     for (let count = 0; count < (effect.amount || 1); count += 1) {
       if (owner.hand.length >= RULES.handLimit) return;
-      owner.hand.push(this.cards.createRandomNeutral());
+      this.state.zones.addToHand(
+        context.side,
+        this.cards.createRandomNeutral(),
+      );
       this.state.addLog(`${sideName(context.side)}获得一张通用卡。`);
     }
+  }
+
+  combo(effect, context) {
+    if (this.state.player(context.side).cardsPlayedThisTurn < 2) return;
+    const actor = context.self?.role || sideName(context.side);
+    this.state.addLog(`${actor}触发连拍。`, "combo");
+    this.resolve(effect.effects || [], context);
+  }
+
+  whileArmed(effect, context) {
+    if (!this.state.player(context.side).weapon) return;
+    const actor = context.self?.role || sideName(context.side);
+    this.state.addLog(`${actor}完成持械特技。`, "combo");
+    this.resolve(effect.effects || [], context);
   }
 }
 

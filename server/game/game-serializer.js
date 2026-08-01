@@ -35,6 +35,8 @@ class GameSerializer {
       maxMana: player.maxMana,
       mana: player.mana,
       fatigue: player.fatigue,
+      cardsPlayedThisTurn: player.cardsPlayedThisTurn,
+      charactersLostThisTurn: player.charactersLostThisTurn,
       weapon: player.weapon ? this.publicCard(player.weapon) : null,
       heroCanAttack:
         this.engine.activeSide === side &&
@@ -55,7 +57,25 @@ class GameSerializer {
             CombatResolver.canAttack(card, "minion"),
         }),
       ),
+      zones: {
+        graveyard: player.graveyard.map((entry) =>
+          this.publicZoneEntry(entry),
+        ),
+        burned: player.burned.map((entry) => this.publicZoneEntry(entry)),
+        exiled: player.exiled.map((entry) => this.publicZoneEntry(entry)),
+      },
       deckBreakdown: revealHand ? this.deckBreakdown(player.deckRecipe) : [],
+    };
+  }
+
+  publicZoneEntry(entry) {
+    return {
+      sequence: entry.sequence,
+      turn: entry.turn,
+      side: entry.side,
+      zone: entry.zone,
+      reason: entry.reason,
+      card: this.publicCard(entry.card),
     };
   }
 

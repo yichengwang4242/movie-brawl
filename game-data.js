@@ -3,15 +3,19 @@
     typeof module === "object" && module.exports
       ? require("./expansion-data.js")
       : root?.MOVIE_BRAWL_EXPANSION;
-  const shaw =
+  const builders =
     typeof module === "object" && module.exports
-      ? require("./shaw-cards.js")
-      : root?.MOVIE_BRAWL_SHAW_CARDS;
+      ? require("./card-builders.js")
+      : root?.MOVIE_BRAWL_CARD_BUILDERS;
+  const studioRegistry =
+    typeof module === "object" && module.exports
+      ? require("./studio-registry.js")
+      : root?.MOVIE_BRAWL_STUDIO_REGISTRY;
   const starter =
     typeof module === "object" && module.exports
       ? require("./starter-cards.js")
       : root?.MOVIE_BRAWL_STARTER_CARDS;
-  const pool = factory(expansion, shaw, starter);
+  const pool = factory(expansion, studioRegistry, starter, builders);
   if (typeof module === "object" && module.exports) {
     module.exports = pool;
   }
@@ -20,27 +24,21 @@
   }
 })(
   typeof window !== "undefined" ? window : null,
-  function (expansion = {}, shaw = {}, starter = {}) {
-  const role = (data) => ({
-    id: `role-${data.star}-${data.role}`,
-    type: "role",
-    region: data.region || "华语经典",
-    rarity: data.rarity || "经典",
-    keywords: data.keywords || [],
-    effects: data.effects || [],
-    ...data,
+  function (
+    expansion = {},
+    studioRegistry = { adventureCards: [] },
+    starter = {},
+    builders,
+  ) {
+  const { role } = builders.createCardBuilders({
+    region: "华语经典",
+    rarity: "经典",
+    idFor: (type, data) => `role-${data.star}-${data.role}`,
   });
-
-  const spell = (data) => ({
-    id: `neutral-${data.role}`,
-    type: "spell",
+  const { spell } = builders.createCardBuilders({
     star: "通用",
     region: "片场",
-    attack: 0,
-    health: 0,
-    keywords: [],
-    effects: data.effects || [],
-    ...data,
+    idFor: (type, data) => `neutral-${data.role}`,
   });
 
   const baseRoleCards = [
@@ -62,8 +60,8 @@
       role: "唐伯虎",
       movie: "唐伯虎点秋香",
       cost: 4,
-      attack: 3,
-      health: 5,
+      attack: 2,
+      health: 4,
       motif: "画",
       palette: "jade",
       text: "入场：抽 1 张牌，并使一个友方角色 +1/+1。",
@@ -190,8 +188,8 @@
       role: "黄飞鸿",
       movie: "黄飞鸿",
       cost: 5,
-      attack: 5,
-      health: 6,
+      attack: 4,
+      health: 5,
       motif: "狮",
       palette: "crimson",
       text: "嘲讽。入场：所有友方角色 +1 攻击。",
@@ -839,13 +837,13 @@
     spellCards,
     weaponCards,
     neutralCards,
-    adventureCards: shaw.allCards || [],
+    adventureCards: studioRegistry.adventureCards,
     starterCards: starter.allCards || [],
     allCards: [
       ...roleCards,
       ...neutralCards,
       ...(starter.allCards || []),
-      ...(shaw.allCards || []),
+      ...studioRegistry.adventureCards,
     ],
     stars,
   };

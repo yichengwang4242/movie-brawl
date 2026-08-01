@@ -1,46 +1,30 @@
 (function (root, factory) {
-  const expansion = factory();
+  const builders =
+    typeof module === "object" && module.exports
+      ? require("./card-builders.js")
+      : root?.MOVIE_BRAWL_CARD_BUILDERS;
+  const expansion = factory(builders);
   if (typeof module === "object" && module.exports) {
     module.exports = expansion;
   }
   if (root) {
     root.MOVIE_BRAWL_EXPANSION = expansion;
   }
-})(typeof window !== "undefined" ? window : null, function () {
-  const role = (data) => ({
-    id: `role-${data.star}-${data.role}`,
-    type: "role",
+})(typeof window !== "undefined" ? window : null, function (builders) {
+  const { role } = builders.createCardBuilders({
     region: "华语经典",
-    rarity: data.rarity || "经典",
-    keywords: data.keywords || [],
-    effects: data.effects || [],
-    deathEffects: data.deathEffects || [],
-    ...data,
+    rarity: "经典",
+    idFor: (type, data) => `role-${data.star}-${data.role}`,
   });
-
-  const spell = (data) => ({
-    id: `neutral-${data.role}`,
-    type: "spell",
+  const { spell } = builders.createCardBuilders({
     star: "通用",
     region: "片场",
-    attack: 0,
-    health: 0,
-    keywords: data.keywords || [],
-    effects: data.effects || [],
-    deathEffects: [],
-    ...data,
+    idFor: (type, data) => `neutral-${data.role}`,
   });
-
-  const weapon = (data) => ({
-    id: `weapon-${data.role}`,
-    type: "weapon",
+  const { weapon } = builders.createCardBuilders({
     star: "通用",
     region: "银幕兵器",
-    health: 0,
-    keywords: data.keywords || [],
-    effects: data.effects || [],
-    deathEffects: [],
-    ...data,
+    idFor: (type, data) => `weapon-${data.role}`,
   });
 
   const roleCards = [

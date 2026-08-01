@@ -2,25 +2,21 @@
 
 const {
   existsSync,
+  copyFileSync,
   mkdirSync,
   readFileSync,
   renameSync,
   writeFileSync,
 } = require("node:fs");
 const path = require("node:path");
-
-function freshProfile() {
-  return {
-    schemaVersion: 1,
-    completedStageIds: [],
-    claimedStageIds: [],
-    ownedCardIds: [],
-  };
-}
+const {
+  freshProfile,
+  migrateProfile,
+} = require("./profile-schema.js");
 
 class MemoryProfileRepository {
   constructor(profile = freshProfile()) {
-    this.profile = structuredClone(profile);
+    this.profile = migrateProfile(profile);
   }
 
   load() {
@@ -28,29 +24,46 @@ class MemoryProfileRepository {
   }
 
   save(profile) {
-    this.profile = structuredClone(profile);
+    this.profile = migrateProfile(profile);
   }
 }
 
 class JsonProfileRepository {
-  constructor(filename) {
+  constructor(filename, options = {}) {
     this.filename = filename;
+    this.now = options.now || (() => Date.now());
   }
 
   load() {
     if (!existsSync(this.filename)) return freshProfile();
     try {
-      return { ...freshProfile(), ...JSON.parse(readFileSync(this.filename, "utf8")) };
+      const source = JSON.parse(readFileSync(this.filename, "utf8"));
+      const profile = migrateProfile(source);
+      if (source.schemaVersion !== profile.schemaVersion) this.save(profile);
+      return profile;
     } catch {
+      this.backupInvalidProfile();
       return freshProfile();
     }
   }
 
   save(profile) {
+    const validProfile = migrateProfile(profile);
     mkdirSync(path.dirname(this.filename), { recursive: true });
     const temporary = `${this.filename}.tmp`;
-    writeFileSync(temporary, `${JSON.stringify(profile, null, 2)}\n`, "utf8");
+    writeFileSync(
+      temporary,
+      `${JSON.stringify(validProfile, null, 2)}\n`,
+      "utf8",
+    );
     renameSync(temporary, this.filename);
+  }
+
+  backupInvalidProfile() {
+    if (!existsSync(this.filename)) return null;
+    const backup = `${this.filename}.invalid-${this.now()}`;
+    copyFileSync(this.filename, backup);
+    return backup;
   }
 }
 

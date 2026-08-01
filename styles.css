@@ -1436,6 +1436,82 @@ select {
   text-align: center;
 }
 
+.adventure-studio-switcher {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  padding: 0 2px;
+}
+
+.adventure-studio-switcher > span {
+  flex: 0 0 auto;
+  color: var(--dim);
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.studio-tabs {
+  display: flex;
+  min-width: 0;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--surface-2);
+}
+
+.studio-tab {
+  display: grid;
+  grid-template-columns: 26px minmax(max-content, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  min-width: 176px;
+  min-height: 42px;
+  padding: 5px 10px;
+  border-right: 1px solid var(--line);
+  color: var(--muted);
+  background: transparent;
+  text-align: left;
+}
+
+.studio-tab:last-child {
+  border-right: 0;
+}
+
+.studio-tab > span {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 28px;
+  color: #17140d;
+  background: var(--gold);
+  font-family: "STKaiti", "KaiTi", serif;
+  font-weight: 900;
+}
+
+.studio-tab strong {
+  overflow: hidden;
+  color: inherit;
+  font-size: 0.76rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.studio-tab small {
+  color: var(--dim);
+  font-size: 0.64rem;
+}
+
+.studio-tab:hover,
+.studio-tab.active {
+  color: var(--gold-soft);
+  background: #292b25;
+}
+
+.studio-tab.active {
+  box-shadow: inset 0 -3px 0 var(--vermilion);
+}
+
 .adventure-header {
   display: grid;
   grid-template-columns: minmax(260px, 1fr) minmax(180px, 280px) auto;
@@ -1454,6 +1530,78 @@ select {
       rgba(12, 15, 13, 0.48) 100%
     ),
     url("./assets/shaw-studio-stage.png") center 56% / cover no-repeat;
+}
+
+.adventure-header[data-adventure="golden-harvest"] {
+  border-top-color: var(--gold);
+  background:
+    linear-gradient(
+      90deg,
+      rgba(12, 15, 13, 0.98) 0%,
+      rgba(12, 15, 13, 0.86) 40%,
+      rgba(12, 15, 13, 0.48) 100%
+    ),
+    url("./assets/golden-harvest-stage.png") center 52% / cover no-repeat;
+}
+
+.adventure-header[data-adventure="golden-harvest"] .adventure-emblem {
+  color: #f1e8cf;
+  border-color: rgba(177, 211, 178, 0.66);
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 12px,
+      rgba(255, 255, 255, 0.06) 12px 13px
+    ),
+    #39654d;
+}
+
+.adventure-header[data-adventure="cinema-city"] {
+  border-top-color: #45a89a;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(10, 14, 13, 0.98) 0%,
+      rgba(10, 14, 13, 0.86) 42%,
+      rgba(10, 14, 13, 0.42) 100%
+    ),
+    url("./assets/cinema-city-stage.png") center 54% / cover no-repeat;
+}
+
+.adventure-header[data-adventure="cinema-city"] .adventure-emblem {
+  color: #f4e8c7;
+  border-color: rgba(78, 193, 174, 0.7);
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 11px,
+      rgba(255, 255, 255, 0.07) 11px 12px
+    ),
+    #1c6f68;
+}
+
+.adventure-header[data-adventure="d-and-b"] {
+  border-top-color: #55a58b;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(10, 14, 13, 0.98) 0%,
+      rgba(10, 14, 13, 0.84) 41%,
+      rgba(10, 14, 13, 0.36) 100%
+    ),
+    url("./assets/d-and-b-stage.png") center 50% / cover no-repeat;
+}
+
+.adventure-header[data-adventure="d-and-b"] .adventure-emblem {
+  color: #f7ead1;
+  border-color: rgba(93, 188, 155, 0.72);
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 10px,
+      rgba(255, 255, 255, 0.07) 10px 11px
+    ),
+    #28745e;
 }
 
 .adventure-title {
@@ -1685,6 +1833,8 @@ select {
 }
 
 .stage-boss-name {
+  display: flex;
+  gap: 4px;
   margin-top: 6px;
   color: var(--muted);
   font-size: 0.76rem;
@@ -2179,6 +2329,20 @@ select {
     grid-template-columns: 1fr;
   }
 
+  .adventure-studio-switcher {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .studio-tabs {
+    width: 100%;
+  }
+
+  .studio-tab {
+    flex: 1 0 164px;
+  }
+
   .stage-list {
     grid-template-columns: 1fr;
   }
@@ -2228,6 +2392,34 @@ select {
 
   .adventure-header {
     grid-template-columns: 1fr;
+  }
+
+  .studio-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: hidden;
+  }
+
+  .studio-tab {
+    min-width: 0;
+    min-height: 50px;
+    grid-template-columns: 24px minmax(0, 1fr) auto;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .studio-tab:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .studio-tab:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+
+  .studio-tab strong {
+    overflow: visible;
+    line-height: 1.05;
+    text-overflow: clip;
+    white-space: normal;
   }
 
   .adventure-title {

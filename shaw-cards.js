@@ -1,51 +1,19 @@
 (function (root, factory) {
-  const cards = factory();
+  const builders =
+    typeof module === "object" && module.exports
+      ? require("./card-builders.js")
+      : root?.MOVIE_BRAWL_CARD_BUILDERS;
+  const cards = factory(builders);
   if (typeof module === "object" && module.exports) {
     module.exports = cards;
   }
   if (root) {
     root.MOVIE_BRAWL_SHAW_CARDS = cards;
   }
-})(typeof window !== "undefined" ? window : null, function () {
-  const role = (data) => ({
-    id: `shaw-role-${data.role}`,
-    type: "role",
+})(typeof window !== "undefined" ? window : null, function (builders) {
+  const { role, spell, weapon } = builders.studioCardBuilders({
+    id: "shaw",
     region: "邵氏片场",
-    rarity: data.rarity || "片场",
-    keywords: data.keywords || [],
-    effects: data.effects || [],
-    deathEffects: data.deathEffects || [],
-    adventure: "shaw",
-    ...data,
-  });
-
-  const spell = (data) => ({
-    id: `shaw-spell-${data.role}`,
-    type: "spell",
-    star: "邵氏片场",
-    region: "邵氏片场",
-    rarity: data.rarity || "片场",
-    attack: 0,
-    health: 0,
-    keywords: [],
-    effects: data.effects || [],
-    deathEffects: [],
-    adventure: "shaw",
-    ...data,
-  });
-
-  const weapon = (data) => ({
-    id: `shaw-weapon-${data.role}`,
-    type: "weapon",
-    star: "邵氏片场",
-    region: "邵氏片场",
-    rarity: data.rarity || "片场",
-    health: 0,
-    keywords: data.keywords || [],
-    effects: data.effects || [],
-    deathEffects: [],
-    adventure: "shaw",
-    ...data,
   });
 
   const normalCards = [

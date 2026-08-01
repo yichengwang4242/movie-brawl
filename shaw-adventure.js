@@ -129,11 +129,14 @@
 
   return {
     id: "shaw",
+    order: 1,
     name: "邵氏片场",
+    kicker: "单机冒险 · 第一片场",
     subtitle: "刀光、拳影与三十六房",
     description: "八场经典武侠试炼。头目强在规则与配合，奖励卡均按普通构筑强度结算。",
     motif: "邵",
     palette: "crimson",
+    art: "shaw-studio-stage",
     stages,
     cards: cards.allCards,
   };

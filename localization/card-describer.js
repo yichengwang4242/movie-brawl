@@ -130,6 +130,30 @@
           return this.i18n.t("effect.grantReflect", { amount });
         case "grantDeathEffectRandom":
           return this.i18n.t("effect.grantDeath");
+        case "combo":
+          return this.conditionalText("effect.combo", effect);
+        case "whileArmed":
+          return this.conditionalText("effect.whileArmed", effect);
+        case "withPartner":
+          return this.conditionalText("effect.withPartner", effect);
+        case "comeback":
+          return this.conditionalText("effect.comeback", effect);
+        case "returnFriendlyToHand":
+          return this.i18n.t("effect.returnFriendly", {
+            amount: Math.abs(effect.costAdjustment || 0),
+            direction: (effect.costAdjustment || 0) > 0
+              ? this.i18n.t("effect.costIncrease")
+              : this.i18n.t("effect.costReduction"),
+          });
+        case "soloSpotlight":
+          return this.conditionalText("effect.soloSpotlight", effect);
+        case "handover":
+          return this.conditionalText("effect.handover", effect);
+        case "twoTrack":
+          return this.i18n.t("effect.twoTrack", {
+            commercial: this.effectList(effect.commercialEffects),
+            creative: this.effectList(effect.creativeEffects),
+          });
         default:
           return this.i18n.locale === "en"
             ? `Effect: ${effect.type}.`
@@ -168,6 +192,15 @@
         stats: `${token.attack || 0}/${token.health || 0}`,
         role: this.i18n.entity(token.role || "群演"),
       });
+    }
+
+    conditionalText(key, effect) {
+      const text = this.effectList(effect.effects);
+      return this.i18n.t(key, { text });
+    }
+
+    effectList(effects = []) {
+      return effects.map((nested) => this.effectText(nested)).join(" ");
     }
   }
 

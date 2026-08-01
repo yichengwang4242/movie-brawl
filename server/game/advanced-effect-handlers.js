@@ -27,8 +27,7 @@ class AdvancedEffectHandlers {
           (left.currentAttack + left.currentHealth),
       )
       .slice(0, count);
-    const ids = new Set(ingredients.map((card) => card.instanceId));
-    owner.board = owner.board.filter((card) => !ids.has(card.instanceId));
+    this.state.zones.exileFromBoard(context.side, ingredients, "fusion");
 
     const inheritedKeywords = ingredients.flatMap((card) =>
       card.keywords.filter((keyword) =>
@@ -65,7 +64,7 @@ class AdvancedEffectHandlers {
       fused.attacksRemaining = 1;
       fused.attackRestriction = "minions";
     }
-    owner.board.push(fused);
+    this.state.zones.addToBoard(context.side, fused);
     this.state.addLog(
       `${ingredients.map((card) => card.role).join("与")}融合为 ${fused.role}。`,
       "fusion",

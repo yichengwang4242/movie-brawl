@@ -1,52 +1,21 @@
 (function (root, factory) {
-  const cards = factory();
+  const builders =
+    typeof module === "object" && module.exports
+      ? require("./card-builders.js")
+      : root?.MOVIE_BRAWL_CARD_BUILDERS;
+  const cards = factory(builders);
   if (typeof module === "object" && module.exports) {
     module.exports = cards;
   }
   if (root) {
     root.MOVIE_BRAWL_STARTER_CARDS = cards;
   }
-})(typeof window !== "undefined" ? window : null, function () {
-  const role = (data) => ({
-    id: `starter-role-${data.role}`,
-    type: "role",
+})(typeof window !== "undefined" ? window : null, function (builders) {
+  const { role, spell, weapon } = builders.createCardBuilders({
     star: "基础卡",
-    region: data.region,
     rarity: "普通",
-    keywords: data.keywords || [],
-    effects: data.effects || [],
-    deathEffects: [],
-    starter: true,
-    ...data,
-  });
-
-  const spell = (data) => ({
-    id: `starter-spell-${data.role}`,
-    type: "spell",
-    star: "基础卡",
-    region: data.region,
-    rarity: "普通",
-    attack: 0,
-    health: 0,
-    keywords: [],
-    effects: data.effects || [],
-    deathEffects: [],
-    starter: true,
-    ...data,
-  });
-
-  const weapon = (data) => ({
-    id: `starter-weapon-${data.role}`,
-    type: "weapon",
-    star: "基础卡",
-    region: data.region,
-    rarity: "普通",
-    health: 0,
-    keywords: [],
-    effects: data.effects || [],
-    deathEffects: [],
-    starter: true,
-    ...data,
+    flags: { starter: true },
+    idFor: (type, data) => `starter-${type}-${data.role}`,
   });
 
   const allCards = [
@@ -128,7 +97,7 @@
       region: "武侠",
       cost: 2,
       attack: 1,
-      health: 4,
+      health: 3,
       motif: "镖",
       palette: "jade",
       text: "嘲讽。",
@@ -173,7 +142,7 @@
       movie: "江湖武侠",
       region: "武侠",
       cost: 3,
-      attack: 3,
+      attack: 2,
       health: 3,
       motif: "侠",
       palette: "jade",
@@ -185,7 +154,7 @@
       movie: "警匪行动",
       region: "警匪",
       cost: 3,
-      attack: 3,
+      attack: 2,
       health: 3,
       motif: "案",
       palette: "steel",
