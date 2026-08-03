@@ -1628,6 +1628,30 @@ select {
     #dfb654;
 }
 
+.adventure-header[data-adventure="milkyway-image"] {
+  border-top-color: #78a9a1;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(8, 13, 14, 0.98) 0%,
+      rgba(8, 13, 14, 0.86) 41%,
+      rgba(8, 13, 14, 0.36) 100%
+    ),
+    url("./assets/milkyway-image-stage.png") center 48% / cover no-repeat;
+}
+
+.adventure-header[data-adventure="milkyway-image"] .adventure-emblem {
+  color: #e9f1ee;
+  border-color: rgba(142, 190, 181, 0.72);
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 10px,
+      rgba(255, 255, 255, 0.06) 10px 11px
+    ),
+    #355e5d;
+}
+
 .adventure-title {
   display: flex;
   align-items: center;

@@ -114,6 +114,14 @@
     英雄本色III夕阳之歌: "A Better Tomorrow III",
     笑傲江湖: "Swordsman",
     辣手神探: "Hard Boiled",
+    一个字头的诞生: "Too Many Ways to Be No. 1",
+    暗花: "The Longest Nite",
+    暗战: "Running Out of Time",
+    枪火: "The Mission",
+    PTU: "PTU",
+    黑社会: "Election",
+    "放·逐": "Exiled",
+    神探: "Mad Detective",
     临时登场: "Cameo Appearance",
   };
 });

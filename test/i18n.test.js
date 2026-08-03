@@ -8,6 +8,7 @@ const goldenHarvestAdventure = require("../golden-harvest-adventure.js");
 const cinemaCityAdventure = require("../cinema-city-adventure.js");
 const dandBAdventure = require("../d-and-b-adventure.js");
 const goldenPrincessAdventure = require("../golden-princess-adventure.js");
+const milkywayImageAdventure = require("../milkyway-image-adventure.js");
 const studioRegistry = require("../studio-registry.js");
 const messages = require("../localization/messages.js");
 const { I18n } = require("../localization/i18n.js");
@@ -32,6 +33,7 @@ function englishI18n() {
       ...cinemaCityAdventure.stages,
       ...dandBAdventure.stages,
       ...goldenPrincessAdventure.stages,
+      ...milkywayImageAdventure.stages,
     ],
   }, {
     locale: "en",
@@ -73,7 +75,7 @@ test("全部卡牌字段与技能在英文模式下均有英文展示", () => {
   }
 });
 
-test("五个片场四十关的片名、头目和场地机制均有英文版本", () => {
+test("六个片场四十八关的片名、头目和场地机制均有英文版本", () => {
   const i18n = englishI18n();
   const stages = [
     ...shawAdventure.stages,
@@ -81,6 +83,7 @@ test("五个片场四十关的片名、头目和场地机制均有英文版本",
     ...cinemaCityAdventure.stages,
     ...dandBAdventure.stages,
     ...goldenPrincessAdventure.stages,
+    ...milkywayImageAdventure.stages,
   ];
   for (const source of stages) {
     const stage = i18n.stage(source);
@@ -100,7 +103,7 @@ test("五个片场四十关的片名、头目和场地机制均有英文版本",
   }
 });
 
-test("四十种头目机制的首回合战报可以完整显示为英文", () => {
+test("四十八种头目机制的首回合战报可以完整显示为英文", () => {
   const i18n = englishI18n();
   for (const adventure of studioRegistry.adventures) {
     adventure.stages.forEach((stage, index) => {
@@ -148,6 +151,8 @@ test("动态战斗战报模板覆盖卡牌、武器、亡语和疲劳事件", ()
     "贝多芬完成接班。",
     "宁采臣触发首映。",
     "李鹰接上连映。",
+    "阿琛进入对峙。",
+    "黄阿狗压线完成时限。",
   ];
   for (const message of samples) {
     assert.doesNotMatch(

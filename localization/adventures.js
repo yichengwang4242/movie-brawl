@@ -41,6 +41,13 @@
       description:
         "Eight classics from the Golden Princess circuit and library. Open each turn with Premiere, then switch card types to build a Double Feature.",
     },
+    "milkyway-image": {
+      name: "Milkyway Image",
+      kicker: "Solo Adventure · Studio Six",
+      subtitle: "Cold formations, fateful standoffs, and ticking clocks",
+      description:
+        "Eight Milkyway Image crime classics. Match the opposing formation for Standoff, then spend down to the wire to trigger Deadline.",
+    },
     stages: {
       "shaw-01-inn": {
         title: "Trial at the Inn",
@@ -321,6 +328,62 @@
         mechanicTitle: "Midnight Double Feature",
         mechanicText:
           "Cycle through a Premiere that summons and draws, an Intermission that heals and grants Shield, and a Midnight Show that damages your board.",
+      },
+      "milkyway-image-01-prefix": {
+        title: "Two Roads through the Underworld",
+        bossName: "Dealer of Fate",
+        mechanicTitle: "Two Paths through Fate",
+        mechanicText:
+          "On odd boss turns, summon a 1/1 Underworld Drifter. On even turns, an enemy gains +1/+1; with an empty board, your hero takes 1 damage.",
+      },
+      "milkyway-image-02-longest-nite": {
+        title: "Macau's Longest Night",
+        bossName: "Mr Hung",
+        mechanicTitle: "The Longest Deadlock",
+        mechanicText:
+          "At the start of each boss turn, Stun a random friendly character. With an empty board, your hero takes 1 damage.",
+      },
+      "milkyway-image-03-running-out": {
+        title: "The Seventy-Two Hour Game",
+        bossName: "Cheung Peter",
+        mechanicTitle: "72-Hour Countdown",
+        mechanicText:
+          "Cycle through a boss draw, reducing your highest-Attack character by 1 Attack, then dealing 1 damage to your hero.",
+      },
+      "milkyway-image-04-mission": {
+        title: "Five Men in the Mall",
+        bossName: "Boss Lung",
+        mechanicTitle: "Silent Bodyguard Formation",
+        mechanicText:
+          "While the enemy controls fewer than three characters, summon a 1/2 Silent Bodyguard. The first completed formation grants all enemies +1 Attack.",
+      },
+      "milkyway-image-05-ptu": {
+        title: "The Lost Gun in Tsim Sha Tsui",
+        bossName: "Sergeant Ho",
+        mechanicTitle: "Lost-Gun Search Line",
+        mechanicText:
+          "On odd boss turns, add a 1/1 PTU Officer. On even turns, your highest-Attack character loses 1 Attack.",
+      },
+      "milkyway-image-06-election": {
+        title: "The Dragon Head Election",
+        bossName: "Big D",
+        mechanicTitle: "Society Election Night",
+        mechanicText:
+          "Cycle through canvassing, guarding the ballot, and the result: the boss draws, grants Shield, then gives all enemies +1 Attack.",
+      },
+      "milkyway-image-07-exiled": {
+        title: "One Last Dinner in Macau",
+        bossName: "Boss Fay",
+        mechanicTitle: "Countdown to Exile",
+        mechanicText:
+          "The first time the boss falls to 18 Health or less, summon two 2/1 Rush Pursuers.",
+      },
+      "milkyway-image-08-detective": {
+        title: "Seven Faces in the Mirror Room",
+        bossName: "Bun",
+        mechanicTitle: "Seven Personalities",
+        mechanicText:
+          "Cycle through Aggression, Fear, and Greed: summon a Rush persona, heal and grant Shield, then damage your lowest-Health character.",
       },
     },
   };

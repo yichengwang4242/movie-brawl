@@ -158,6 +158,10 @@
           return this.conditionalText("effect.premiere", effect);
         case "doubleFeature":
           return this.conditionalText("effect.doubleFeature", effect);
+        case "standoff":
+          return this.conditionalText("effect.standoff", effect);
+        case "deadline":
+          return this.conditionalText("effect.deadline", effect);
         default:
           return this.i18n.locale === "en"
             ? `Effect: ${effect.type}.`

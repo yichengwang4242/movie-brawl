@@ -63,6 +63,18 @@
       effectExport: "GoldenPrincessEffectHandlers",
       artFile: "assets/golden-princess-stage.png",
     },
+    {
+      id: "milkyway-image",
+      cardModule: "./milkyway-image-cards.js",
+      adventureModule: "./milkyway-image-adventure.js",
+      cardGlobal: "MOVIE_BRAWL_MILKYWAY_IMAGE_CARDS",
+      adventureGlobal: "MOVIE_BRAWL_MILKYWAY_IMAGE_ADVENTURE",
+      encounterModule: "./server/adventure/milkyway-image-encounter-rules.js",
+      encounterExport: "MilkywayImageEncounterRules",
+      effectModule: "./server/game/milkyway-image-effect-handlers.js",
+      effectExport: "MilkywayImageEffectHandlers",
+      artFile: "assets/milkyway-image-stage.png",
+    },
   ];
 
   class StudioRegistry {

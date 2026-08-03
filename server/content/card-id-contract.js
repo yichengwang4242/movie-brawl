@@ -2,10 +2,10 @@
 
 const { createHash } = require("node:crypto");
 
-const CARD_ID_CONTRACT_VERSION = 2;
-const EXPECTED_CARD_COUNT = 195;
+const CARD_ID_CONTRACT_VERSION = 3;
+const EXPECTED_CARD_COUNT = 213;
 const EXPECTED_CARD_ID_HASH =
-  "5c97d9fcadbe806425efde8c7288a103cca500204bbfe5eafac53ef4a53c9402";
+  "af619ac17489fcdceb7a014a032b109b1bdec9e0b689d9444e7763e3365a31ed";
 
 function cardIdHash(cards) {
   return createHash("sha256")

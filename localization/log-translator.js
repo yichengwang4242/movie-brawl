@@ -58,6 +58,33 @@
       "Premiere: a Midnight Detective enters and the boss draws a card.",
     "子夜场开火，我方阵容受到 1 点伤害。":
       "The Midnight Show opens fire. Your board takes 1 damage.",
+    "命运岔路出现一名江湖路人。":
+      "A drifter appears at the fork in fate.",
+    "无人选择岔路，我方英雄受到 1 点伤害。":
+      "No one takes the fork. Your hero takes 1 damage.",
+    "澳门死局逼近，我方英雄受到 1 点伤害。":
+      "The Macau deadlock closes in. Your hero takes 1 damage.",
+    "倒计时 72 小时：头目抽 1 张牌。":
+      "72-hour countdown: the boss draws 1 card.",
+    "倒计时继续推进。": "The countdown continues.",
+    "倒计时归零，我方英雄受到 1 点伤害。":
+      "The countdown expires. Your hero takes 1 damage.",
+    "静默保镖阵就位，敌方全体获得 +1 攻击。":
+      "The silent bodyguard formation locks in. All enemy characters gain +1 Attack.",
+    "失枪搜索线补入一名 PTU 警员。":
+      "A PTU Officer joins the lost-gun search line.",
+    "搜索线收紧，我方英雄受到 1 点伤害。":
+      "The search line tightens. Your hero takes 1 damage.",
+    "拉票阶段：头目抽 1 张牌。":
+      "Canvassing: the boss draws 1 card.",
+    "选举定局，敌方全体获得 +1 攻击。":
+      "The election is settled. All enemy characters gain +1 Attack.",
+    "放逐倒计时触发，两名疾冲追兵入场。":
+      "The exile countdown triggers. Two Rush Pursuers enter.",
+    "进取人格现身并获得疾冲。":
+      "The Aggressive Persona appears with Rush.",
+    "贪念人格锁定我方最脆弱的位置。":
+      "The Greedy Persona targets your most vulnerable position.",
   };
 
   class LogTranslator {
@@ -163,6 +190,22 @@
           `${this.i18n.entity(role)} triggers Premiere.`],
         [/^(.+)接上连映。$/, (role) =>
           `${this.i18n.entity(role)} starts a Double Feature.`],
+        [/^(.+)进入对峙。$/, (role) =>
+          `${this.i18n.entity(role)} enters Standoff.`],
+        [/^(.+)压线完成时限。$/, (role) =>
+          `${this.i18n.entity(role)} completes Deadline.`],
+        [/^(.+)选定江湖路，获得 \+1\/\+1。$/, (role) =>
+          `${this.i18n.entity(role)} chooses an underworld path and gains +1/+1.`],
+        [/^(.+)被暗花死局锁住。$/, (role) =>
+          `${this.i18n.entity(role)} is locked in the longest deadlock.`],
+        [/^(.+)被谈判拖延，失去 1 攻击。$/, (role) =>
+          `${this.i18n.entity(role)} is delayed by the negotiation and loses 1 Attack.`],
+        [/^(.+)接受盘查，失去 1 攻击。$/, (role) =>
+          `${this.i18n.entity(role)} is stopped for questioning and loses 1 Attack.`],
+        [/^(.+)守住票箱，获得护盾。$/, (role) =>
+          `${this.i18n.entity(role)} guards the ballot box and gains Shield.`],
+        [/^恐惧人格退守，头目恢复 (\d+) 点生命并获得护盾。$/, (amount) =>
+          `The Fearful Persona retreats. The boss restores ${amount} Health and gains Shield.`],
         [/^(.+)被幽灯迷引，失去 1 攻击。$/, (role) =>
           `${this.i18n.entity(role)} is led astray by spirit lanterns and loses 1 Attack.`],
         [/^(.+)被杀手合约锁定。$/, (role) =>
