@@ -147,6 +147,7 @@ class GameEngine {
     player.mana -= card.cost;
     this.state.zones.removeFromHand(side, card.instanceId);
     player.cardsPlayedThisTurn += 1;
+    player.cardTypesPlayedThisTurn.push(card.type);
     this.state.addLog(
       `${sideName(side)}打出 ${card.role}。`,
       side === "player" ? "player" : "enemy",

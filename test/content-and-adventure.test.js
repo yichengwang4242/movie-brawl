@@ -11,6 +11,9 @@ const cinemaCityCards = require("../cinema-city-cards.js");
 const cinemaCityAdventure = require("../cinema-city-adventure.js");
 const dandBCards = require("../d-and-b-cards.js");
 const dandBAdventure = require("../d-and-b-adventure.js");
+const goldenPrincessCards = require("../golden-princess-cards.js");
+const goldenPrincessAdventure = require("../golden-princess-adventure.js");
+const studioRegistry = require("../studio-registry.js");
 const starterCards = require("../starter-cards.js");
 const {
   AdventureService,
@@ -75,10 +78,10 @@ test("扩展卡池保持十位明星并包含角色、法术和武器", () => {
   assert.equal(cardPool.spellCards.length, 26);
   assert.equal(cardPool.weaponCards.length, 6);
   assert.equal(cardPool.neutralCards.length, 32);
-  assert.equal(cardPool.adventureCards.length, 72);
+  assert.equal(cardPool.adventureCards.length, 90);
   assert.equal(cardPool.starterCards.length, 13);
-  assert.equal(cardPool.allCards.length, 177);
-  assert.equal(new Set(cardPool.allCards.map((card) => card.id)).size, 177);
+  assert.equal(cardPool.allCards.length, 195);
+  assert.equal(new Set(cardPool.allCards.map((card) => card.id)).size, 195);
   assert.ok(cardPool.stars.every((star) => star.cards.length === 6));
 });
 
@@ -184,13 +187,8 @@ test("挑战某个片场时优先把该片场已获得卡装入牌组", () => {
   assert.equal(playerDeck.length, 15);
 });
 
-test("四个片场冒险都包含八关并按要求设置头目奖励", () => {
-  for (const adventure of [
-    shawAdventure,
-    goldenHarvestAdventure,
-    cinemaCityAdventure,
-    dandBAdventure,
-  ]) {
+test("五个片场冒险都包含八关并按要求设置头目奖励", () => {
+  for (const adventure of studioRegistry.adventures) {
     assert.equal(adventure.stages.length, 8);
     assert.deepEqual(
       adventure.stages.map((stage) => stage.bossType),
@@ -280,6 +278,23 @@ test("德宝以独角、双线与接班形成场面判断风格", () => {
   assert.equal(effects.includes("withPartner"), false);
 });
 
+test("金公主以首映与跨类型连映形成院线排片风格", () => {
+  const collectEffects = (effects) =>
+    effects.flatMap((effect) => [
+      effect.type,
+      ...collectEffects(effect.effects || []),
+    ]);
+  const effects = goldenPrincessCards.allCards.flatMap((card) =>
+    collectEffects([...(card.effects || []), ...(card.deathEffects || [])]),
+  );
+
+  assert.ok(effects.filter((type) => type === "premiere").length >= 8);
+  assert.ok(effects.filter((type) => type === "doubleFeature").length >= 7);
+  assert.equal(effects.includes("combo"), false);
+  assert.equal(effects.includes("withPartner"), false);
+  assert.equal(goldenPrincessAdventure.order, 5);
+});
+
 test("十五张牌冒险使用分级 AI 与受控的头目生命曲线", () => {
   const expectedDifficulty = {
     small: "easy",
@@ -287,12 +302,7 @@ test("十五张牌冒险使用分级 AI 与受控的头目生命曲线", () => {
     final: "hard",
   };
 
-  for (const adventure of [
-    shawAdventure,
-    goldenHarvestAdventure,
-    cinemaCityAdventure,
-    dandBAdventure,
-  ]) {
+  for (const adventure of studioRegistry.adventures) {
     adventure.stages.forEach((stage, index) => {
       const previous = adventure.stages.slice(0, index);
       const profile = {
@@ -340,6 +350,8 @@ test("冒险进度要求按顺序通关并领取上一关奖励", () => {
   assert.equal(state.adventures[2].stages[1].unlocked, false);
   assert.equal(state.adventures[3].stages[0].unlocked, true);
   assert.equal(state.adventures[3].stages[1].unlocked, false);
+  assert.equal(state.adventures[4].stages[0].unlocked, true);
+  assert.equal(state.adventures[4].stages[1].unlocked, false);
   adventures.complete("shaw-01-inn", "player");
   state = adventures.state();
   assert.equal(state.adventures[0].stages[1].unlocked, true);
@@ -359,13 +371,8 @@ test("冒险进度要求按顺序通关并领取上一关奖励", () => {
   );
 });
 
-test("四个片场的头目奖励卡都保持普通构筑费用曲线", () => {
-  for (const cards of [
-    shawCards,
-    goldenHarvestCards,
-    cinemaCityCards,
-    dandBCards,
-  ]) {
+test("五个片场的头目奖励卡都保持普通构筑费用曲线", () => {
+  for (const cards of studioRegistry.cardSets) {
     assert.equal(cards.bossCards.length, 3);
     for (const card of cards.bossCards) {
       assert.ok(card.cost >= 4);
@@ -408,13 +415,8 @@ test("服务端在击败小头目后只接受本关三选一奖励", () => {
   assert.equal(adventures.claim("shaw-01-inn", chosen.id).card.id, chosen.id);
 });
 
-test("三十二种片场机制都能完成首个头目回合", () => {
-  for (const adventure of [
-    shawAdventure,
-    goldenHarvestAdventure,
-    cinemaCityAdventure,
-    dandBAdventure,
-  ]) {
+test("四十种片场机制都能完成首个头目回合", () => {
+  for (const adventure of studioRegistry.adventures) {
     adventure.stages.forEach((stage, index) => {
       const previous = adventure.stages.slice(0, index);
       const profile = {

@@ -46,6 +46,18 @@
       "Debt Collection: the boss draws 2 cards and all enemy characters gain +1 Attack.",
     "空袭掠过街区，双方阵容受到 1 点伤害。":
       "An air raid crosses the district. Both boards take 1 damage.",
+    "教堂交火锁定我方最脆弱的位置。":
+      "Church crossfire locks onto your most vulnerable position.",
+    "杀手合约进入清场阶段。":
+      "The Killer's Contract enters its clearing phase.",
+    "夕阳车队开火，逃生同伴入场。":
+      "The Sunset Convoy opens fire and an Escape Companion enters.",
+    "午夜档期进入倒计时，双方英雄受到 1 点伤害。":
+      "The Midnight Slot counts down. Both heroes take 1 damage.",
+    "首映场：重案警员入场，头目抽牌。":
+      "Premiere: a Midnight Detective enters and the boss draws a card.",
+    "子夜场开火，我方阵容受到 1 点伤害。":
+      "The Midnight Show opens fire. Your board takes 1 damage.",
   };
 
   class LogTranslator {
@@ -147,6 +159,22 @@
           `${this.i18n.entity(role)} selects the Creative Track.`],
         [/^(.+)完成接班。$/, (role) =>
           `${this.i18n.entity(role)} completes Handover.`],
+        [/^(.+)触发首映。$/, (role) =>
+          `${this.i18n.entity(role)} triggers Premiere.`],
+        [/^(.+)接上连映。$/, (role) =>
+          `${this.i18n.entity(role)} starts a Double Feature.`],
+        [/^(.+)被幽灯迷引，失去 1 攻击。$/, (role) =>
+          `${this.i18n.entity(role)} is led astray by spirit lanterns and loses 1 Attack.`],
+        [/^(.+)被杀手合约锁定。$/, (role) =>
+          `${this.i18n.entity(role)} is marked by the Killer's Contract.`],
+        [/^(.+)冲进决胜圈，获得 \+1\/\+1。$/, (role) =>
+          `${this.i18n.entity(role)} enters the final lap and gains +1/+1.`],
+        [/^(.+)听琴定神，获得护盾。$/, (role) =>
+          `${this.i18n.entity(role)} finds focus in the music and gains Shield.`],
+        [/^(.+)以剑和曲，获得 \+1 攻击。$/, (role) =>
+          `${this.i18n.entity(role)} joins sword to score and gains +1 Attack.`],
+        [/中场休整：头目恢复 (\d+) 点生命，并为角色补上护盾。$/, (amount) =>
+          `Intermission: the boss restores ${amount} Health and grants a character Shield.`],
         [/^(.+)完成警署轮班，获得 \+1 攻击。$/, (role) =>
           `${this.i18n.entity(role)} completes the police shift and gains +1 Attack.`],
         [/^(.+)守住家当，获得 \+0\/\+1。$/, (role) =>

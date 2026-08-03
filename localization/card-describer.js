@@ -154,6 +154,10 @@
             commercial: this.effectList(effect.commercialEffects),
             creative: this.effectList(effect.creativeEffects),
           });
+        case "premiere":
+          return this.conditionalText("effect.premiere", effect);
+        case "doubleFeature":
+          return this.conditionalText("effect.doubleFeature", effect);
         default:
           return this.i18n.locale === "en"
             ? `Effect: ${effect.type}.`

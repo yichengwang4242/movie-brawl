@@ -1604,6 +1604,30 @@ select {
     #28745e;
 }
 
+.adventure-header[data-adventure="golden-princess"] {
+  border-top-color: #e1b759;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(12, 14, 12, 0.98) 0%,
+      rgba(12, 14, 12, 0.86) 40%,
+      rgba(12, 14, 12, 0.38) 100%
+    ),
+    url("./assets/golden-princess-stage.png") center 52% / cover no-repeat;
+}
+
+.adventure-header[data-adventure="golden-princess"] .adventure-emblem {
+  color: #1b170d;
+  border-color: rgba(247, 219, 145, 0.8);
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 9px,
+      rgba(79, 52, 12, 0.12) 9px 10px
+    ),
+    #dfb654;
+}
+
 .adventure-title {
   display: flex;
   align-items: center;
@@ -2411,7 +2435,8 @@ select {
     border-right: 0;
   }
 
-  .studio-tab:nth-last-child(-n + 2) {
+  .studio-tab:nth-last-child(-n + 2):nth-child(odd),
+  .studio-tab:last-child {
     border-bottom: 0;
   }
 

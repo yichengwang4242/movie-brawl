@@ -36,6 +36,7 @@ class GameSerializer {
       mana: player.mana,
       fatigue: player.fatigue,
       cardsPlayedThisTurn: player.cardsPlayedThisTurn,
+      cardTypesPlayedThisTurn: [...player.cardTypesPlayedThisTurn],
       charactersLostThisTurn: player.charactersLostThisTurn,
       weapon: player.weapon ? this.publicCard(player.weapon) : null,
       heroCanAttack:

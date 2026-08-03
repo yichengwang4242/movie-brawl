@@ -20,22 +20,24 @@ battler that can keep growing over time.
 ## Game Content
 
 - 10 stars with 6 character cards each, for a total of 60 character cards.
-- Instant Chinese and English switching across the interface, all 177 cards,
+- Instant Chinese and English switching across the interface, all 195 cards,
   adventure content, battle logs, and error messages.
 - A 15-card beginner deck with four 1-cost cards, five 2-cost cards, four
   3-cost cards, and two core cards. Opening hands are fully shuffled and may
   occasionally have an awkward curve.
-- 105 Basic and Classic cards, plus 72 characters, spells, and weapons earned
+- 105 Basic and Classic cards, plus 90 characters, spells, and weapons earned
   through the Shaw Studio, Golden Harvest Studio, Cinema City Studio, and
-  D & B Studio adventures.
-- Four independent eight-stage studio adventures. In each route, stages 3 and 5
+  D & B Studio and Golden Princess Circuit adventures.
+- Five independent eight-stage studio adventures. In each route, stages 3 and 5
   are mid-bosses and stage 8 is the final boss.
 - Shaw Studio favors durable formations, Taunt, Shield, and gradual training.
   Golden Harvest favors attack-heavy characters, weapons, Rush, Combo chains,
   and armed Stunts. Cinema City favors Partner ensembles, Comeback turns, and
   returning characters to hand for another entrance. D & B rewards reading the
   board through Solo, two-track choices, and Handover after a friendly character
-  leaves play. Later bosses use a higher proportion of their studio cards.
+  leaves play. Golden Princess rewards opening with Premiere and switching card
+  types to build a Double Feature. Later bosses use a higher proportion of their
+  studio cards.
 - Defeating a standard boss for the first time offers a choice of three common
   cards. Mid-bosses and the final boss award their corresponding boss cards.
 - Adventure progress and the collection are stored in a local server save.
@@ -45,7 +47,7 @@ battler that can keep growing over time.
 - Three independent AI strategies: Easy, Normal, and Hard.
 - Taunt, Shield, Rush, Lifesteal, Stun, Summon, Deathrattle, Retaliate,
   Fusion, Partner, Comeback, Return-to-Hand, Solo, Two-Track, and Handover
-  mechanics.
+  mechanics, plus Premiere and Double Feature sequencing.
 - Weapons have Attack and Durability, allowing the hero to attack once per
   turn while equipped.
 - Collection search and filtering, deck composition details, and local career
@@ -76,9 +78,8 @@ profile.
 
 ## How to Play
 
-1. Choose Shaw Studio, Golden Harvest Studio, Cinema City Studio, or D & B
-   Studio from the Adventure screen and challenge that studio's eight stages
-   in order.
+1. Choose one of the five studios from the Adventure screen and challenge that
+   studio's eight stages in order.
 2. After defeating a standard boss, choose one of three cards. Mid-bosses and
    the final boss unlock their corresponding boss cards directly.
 3. Reward cards replace the closest-cost Basic card of the same type, keeping
@@ -104,6 +105,8 @@ profile.
 ├── cinema-city-adventure.js  # Third eight-stage adventure
 ├── d-and-b-cards.js          # D & B reward cards
 ├── d-and-b-adventure.js      # Fourth eight-stage adventure
+├── golden-princess-cards.js # Golden Princess Circuit reward cards
+├── golden-princess-adventure.js # Fifth eight-stage adventure
 ├── starter-cards.js          # Beginner common cards
 ├── assets/                   # Original game visual assets
 ├── localization/             # UI, card, film, adventure, and log translations
@@ -135,6 +138,7 @@ profile.
 │       ├── advanced-effect-handlers.js # Fusion and Retaliate buffs
 │       ├── cinema-city-effect-handlers.js # Partner, Comeback, and Return effects
 │       ├── d-and-b-effect-handlers.js # Solo, Two-Track, and Handover effects
+│       ├── golden-princess-effect-handlers.js # Premiere and Double Feature effects
 │       ├── effect-handler-extensions.js # Registers studio-specific effect groups
 │       ├── ai-director.js    # AI turn orchestration
 │       ├── ai/               # Three AI difficulty strategies
@@ -184,7 +188,7 @@ monolith.
 ## Development Status
 
 - Complete: server-authoritative battles, three AI difficulties, a 15-card
-  beginner deck, four eight-stage studio adventures, 177 cards, bilingual
+  beginner deck, five eight-stage studio adventures, 195 cards, bilingual
   presentation, and local saves.
 - In progress: stage balance, consistent card wording, animation, and audio
   feedback.

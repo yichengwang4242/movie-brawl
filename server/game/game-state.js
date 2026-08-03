@@ -48,6 +48,7 @@ class GameState {
       heroAttacksRemaining: 0,
       heroAttackUsedThisTurn: false,
       cardsPlayedThisTurn: 0,
+      cardTypesPlayedThisTurn: [],
       charactersLostThisTurn: 0,
       graveyard: [],
       burned: [],
@@ -119,6 +120,7 @@ class GameState {
     player.heroAttackUsedThisTurn = false;
     player.heroAttacksRemaining = player.weapon ? 1 : 0;
     player.cardsPlayedThisTurn = 0;
+    player.cardTypesPlayedThisTurn = [];
     player.charactersLostThisTurn = 0;
 
     for (const card of player.board) {

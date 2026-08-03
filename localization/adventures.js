@@ -34,6 +34,13 @@
       description:
         "Eight D & B film adventures. Read the board with Solo, Two-Track, and Handover while shifting between commercial genre craft and creative drama.",
     },
+    "golden-princess": {
+      name: "Golden Princess Circuit",
+      kicker: "Solo Adventure · Studio Five",
+      subtitle: "Programming, premieres, and midnight double features",
+      description:
+        "Eight classics from the Golden Princess circuit and library. Open each turn with Premiere, then switch card types to build a Double Feature.",
+    },
     stages: {
       "shaw-01-inn": {
         title: "Trial at the Inn",
@@ -258,6 +265,62 @@
         mechanicTitle: "Three Wartime Acts",
         mechanicText:
           "Cycle through resistance, air raid, and rations: summon a Taunt defender, damage both boards, then draw and restore Health.",
+      },
+      "golden-princess-01-ghost": {
+        title: "Premiere Night at Lan Ro Temple",
+        bossName: "Black Mountain Demon",
+        mechanicTitle: "Spirit-Lantern Programme",
+        mechanicText:
+          "On odd boss turns, summon a 1/1 Lan Ro Spirit Lantern. On even turns, a random friendly character loses 1 Attack.",
+      },
+      "golden-princess-02-killer": {
+        title: "The Church of Two Gunmen",
+        bossName: "Wong Hoi",
+        mechanicTitle: "Doves in the Crossfire",
+        mechanicText:
+          "When the enemy board is not ahead, summon a 2/1 Rush Contract Gunman. When it is ahead, deal 1 damage to your lowest-Health character.",
+      },
+      "golden-princess-03-contract": {
+        title: "One Last Contract",
+        bossName: "Ah Jong",
+        mechanicTitle: "The Killer's Contract",
+        mechanicText:
+          "Alternate between marking your highest-Attack character with Stun and dealing 1 damage to all your characters.",
+      },
+      "golden-princess-04-along": {
+        title: "The Final Lap",
+        bossName: "Champion Racer",
+        mechanicTitle: "Father and Son Finish",
+        mechanicText:
+          "Every second boss turn, the lowest-Health enemy gains +1/+1. With an empty enemy board, summon a 1/2 Track Apprentice.",
+      },
+      "golden-princess-05-sunset": {
+        title: "Escape into the Saigon Sunset",
+        bossName: "Chow Ying-kit",
+        mechanicTitle: "Sunset Convoy",
+        mechanicText:
+          "The first time the boss falls to 18 Health or less, equip a 3/2 Border Pistol and summon a 2/2 Escape Companion.",
+      },
+      "golden-princess-06-swordsman": {
+        title: "Battle for the Sacred Score",
+        bossName: "Ren Woxing",
+        mechanicTitle: "Zither and Sword in Concert",
+        mechanicText:
+          "On odd boss turns, an enemy character gains Shield. On even turns, an enemy character gains +1 Attack.",
+      },
+      "golden-princess-07-moment": {
+        title: "Midnight Run through Mong Kok",
+        bossName: "Brother Seven",
+        mechanicTitle: "The Midnight Slot",
+        mechanicText:
+          "On odd boss turns, summon a 2/1 Rush Midnight Rider. On even turns, both heroes take 1 damage.",
+      },
+      "golden-princess-08-hard-boiled": {
+        title: "Hospital Midnight Double Feature",
+        bossName: "Inspector Tequila Yuen",
+        mechanicTitle: "Midnight Double Feature",
+        mechanicText:
+          "Cycle through a Premiere that summons and draws, an Intermission that heals and grants Shield, and a Midnight Show that damages your board.",
       },
     },
   };

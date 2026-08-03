@@ -24,11 +24,11 @@ const {
 test("统一片场注册器提供卡池、冒险和规则类", () => {
   assert.deepEqual(
     studioRegistry.adventures.map((adventure) => adventure.id),
-    ["shaw", "golden-harvest", "cinema-city", "d-and-b"],
+    ["shaw", "golden-harvest", "cinema-city", "d-and-b", "golden-princess"],
   );
-  assert.equal(studioRegistry.cardSets.length, 4);
-  assert.equal(studioRegistry.encounterRuleClasses.length, 4);
-  assert.equal(studioRegistry.adventureCards.length, 72);
+  assert.equal(studioRegistry.cardSets.length, 5);
+  assert.equal(studioRegistry.encounterRuleClasses.length, 5);
+  assert.equal(studioRegistry.adventureCards.length, 90);
 });
 
 test("卡牌稳定标识合同阻止未迁移的ID变化", () => {
@@ -105,7 +105,7 @@ test("HTTP入口可测试且只公开注册过的静态资源", async () => {
     "/api/adventures",
     services,
   );
-  assert.equal(catalogResponse.json().adventures.length, 4);
+  assert.equal(catalogResponse.json().adventures.length, 5);
 
   const gameResponse = responseRecorder();
   await handleApi(
@@ -124,6 +124,10 @@ test("HTTP入口可测试且只公开注册过的静态资源", async () => {
     true,
   );
   assert.equal(cardResponse.status, 200);
+  assert.equal(
+    await serveStatic(responseRecorder(), "/golden-princess-cards.js", staticFiles),
+    true,
+  );
   assert.equal(await serveStatic(responseRecorder(), "/server.js", staticFiles), false);
   assert.equal(
     await serveStatic(responseRecorder(), "/../server.js", staticFiles),

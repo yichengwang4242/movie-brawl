@@ -110,6 +110,10 @@
     中华战士: "Magnificent Warriors",
     最后胜利: "Final Victory",
     等待黎明: "Hong Kong 1941",
+    喋血双雄: "The Killer",
+    英雄本色III夕阳之歌: "A Better Tomorrow III",
+    笑傲江湖: "Swordsman",
+    辣手神探: "Hard Boiled",
     临时登场: "Cameo Appearance",
   };
 });

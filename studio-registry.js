@@ -51,6 +51,18 @@
       effectExport: "DandBEffectHandlers",
       artFile: "assets/d-and-b-stage.png",
     },
+    {
+      id: "golden-princess",
+      cardModule: "./golden-princess-cards.js",
+      adventureModule: "./golden-princess-adventure.js",
+      cardGlobal: "MOVIE_BRAWL_GOLDEN_PRINCESS_CARDS",
+      adventureGlobal: "MOVIE_BRAWL_GOLDEN_PRINCESS_ADVENTURE",
+      encounterModule: "./server/adventure/golden-princess-encounter-rules.js",
+      encounterExport: "GoldenPrincessEncounterRules",
+      effectModule: "./server/game/golden-princess-effect-handlers.js",
+      effectExport: "GoldenPrincessEffectHandlers",
+      artFile: "assets/golden-princess-stage.png",
+    },
   ];
 
   class StudioRegistry {
