@@ -2500,6 +2500,158 @@ select {
   }
 }
 
+/* Combat feedback: damage/heal numbers, hit flashes, entrances, fresh log lines. */
+.fx-float {
+  position: absolute;
+  top: 34%;
+  right: 0;
+  left: 0;
+  z-index: 6;
+  width: max-content;
+  margin: 0 auto;
+  padding: 2px 10px;
+  border: 2px solid rgba(247, 240, 229, 0.75);
+  border-radius: 999px;
+  color: #fff;
+  font-size: 1.2rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  line-height: 1.3;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+  animation: fx-float 1100ms ease-out both;
+  animation-delay: var(--fx-offset, 0ms);
+}
+
+.fx-float-damage {
+  background: var(--vermilion);
+}
+
+.fx-float-heal {
+  background: var(--jade);
+}
+
+/* The battle stage clips overflow, so hero numbers rise inside the panel. */
+.hero-panel .fx-float {
+  top: 10px;
+  right: 54px;
+  left: auto;
+}
+
+.game-card.fx-hit {
+  animation: fx-hit 460ms ease-out both;
+  animation-delay: var(--fx-offset, 0ms);
+}
+
+.game-card.fx-heal {
+  animation: fx-heal 700ms ease-out both;
+  animation-delay: var(--fx-offset, 0ms);
+}
+
+.game-card.fx-enter {
+  animation: fx-enter 360ms cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+  animation-delay: var(--fx-offset, 0ms);
+}
+
+.hero-panel.fx-hit {
+  animation: fx-hit 460ms ease-out both;
+}
+
+.hero-panel.fx-heal {
+  animation: fx-heal 700ms ease-out both;
+}
+
+.log-list li.is-fresh {
+  margin: 0 -8px;
+  padding-right: 8px;
+  padding-left: 8px;
+  border-radius: 4px;
+  background: rgba(231, 178, 79, 0.07);
+  box-shadow: inset 2px 0 0 var(--gold);
+}
+
+.log-list li.is-fresh > span {
+  color: var(--gold-soft);
+}
+
+@keyframes fx-float {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.6);
+  }
+  14% {
+    opacity: 1;
+    transform: translateY(0) scale(1.15);
+  }
+  24% {
+    transform: translateY(-2px) scale(1);
+  }
+  72% {
+    opacity: 1;
+    transform: translateY(-14px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-26px) scale(0.95);
+  }
+}
+
+@keyframes fx-hit {
+  0% {
+    transform: translateX(0);
+    filter: brightness(1);
+    box-shadow: 0 0 0 0 rgba(200, 78, 66, 0);
+  }
+  15% {
+    transform: translateX(-5px);
+    filter: brightness(1.55) saturate(0.7);
+    box-shadow: 0 0 0 3px rgba(200, 78, 66, 0.85);
+  }
+  35% {
+    transform: translateX(4px);
+  }
+  55% {
+    transform: translateX(-2px);
+  }
+  100% {
+    transform: translateX(0);
+    filter: brightness(1);
+    box-shadow: 0 0 0 0 rgba(200, 78, 66, 0);
+  }
+}
+
+@keyframes fx-heal {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(47, 146, 117, 0);
+  }
+  30% {
+    box-shadow: 0 0 0 3px rgba(66, 186, 145, 0.8);
+  }
+}
+
+@keyframes fx-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-14px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fx-fade {
+  0%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -2508,5 +2660,11 @@ select {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  /* Keep the numbers readable without motion. */
+  .fx-float {
+    animation-name: fx-fade !important;
+    animation-duration: 1100ms !important;
   }
 }

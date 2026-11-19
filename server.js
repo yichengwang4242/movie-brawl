@@ -162,7 +162,11 @@ function createMovieBrawlServer(options = {}) {
       }
     } catch (error) {
       if (error instanceof GameRuleError) {
-        sendJson(response, 400, { error: error.code, message: error.message });
+        sendJson(response, 400, {
+          error: error.code,
+          message: error.message,
+          ...(error.params ? { params: error.params } : {}),
+        });
         return;
       }
       console.error(error);

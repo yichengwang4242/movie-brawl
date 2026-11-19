@@ -181,6 +181,7 @@
     "error.INTERNAL_ERROR": "片场暂时出了问题。",
     "error.EMPTY_BOSS_DECK": "头目牌组尚未配置。",
     "error.UNKNOWN_EFFECT": "遇到了尚未支持的技能效果。",
+    "error.UNKNOWN_ENCOUNTER_MECHANIC": "遇到了尚未支持的头目机制。",
     "error.UNKNOWN_ACTION": "遇到了未知动作。",
     "error.STAGE_NOT_FOUND": "这个关卡不存在。",
     "error.STAGE_LOCKED": "请先完成前一个关卡。",
@@ -440,6 +441,8 @@
     "error.INTERNAL_ERROR": "The studio encountered a temporary problem.",
     "error.EMPTY_BOSS_DECK": "The boss deck has not been configured.",
     "error.UNKNOWN_EFFECT": "An unsupported card effect was encountered.",
+    "error.UNKNOWN_ENCOUNTER_MECHANIC":
+      "An unsupported boss mechanic was encountered.",
     "error.UNKNOWN_ACTION": "An unknown action was encountered.",
     "error.STAGE_NOT_FOUND": "That stage does not exist.",
     "error.STAGE_LOCKED": "Clear the previous stage first.",

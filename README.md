@@ -119,6 +119,8 @@ profile.
 │   ├── i18n.js               # Browser localization entrypoint
 │   ├── game-api-client.js    # Match API client
 │   ├── battle-view.js        # Battle board view
+│   ├── combat-feedback.js    # Damage/heal numbers, hit flashes, fresh log lines
+│   ├── practice-settings.js  # Remembered practice AI difficulty
 │   ├── card-renderer.js      # Card and inspector rendering
 │   ├── collection-view.js    # Collection view
 │   ├── adventure-view.js     # Adventure map and stage details

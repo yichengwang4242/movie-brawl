@@ -10,10 +10,13 @@ const RULES = Object.freeze({
 });
 
 class GameRuleError extends Error {
-  constructor(code, message) {
+  // `params` fill placeholders in the client's translated message, such as
+  // {count} in "You need at least {count} friendly characters."
+  constructor(code, message, params = null) {
     super(message);
     this.name = "GameRuleError";
     this.code = code;
+    this.params = params;
   }
 }
 

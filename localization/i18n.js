@@ -183,7 +183,7 @@
 
     error(error, params = {}) {
       const key = `error.${error?.code || "REQUEST_FAILED"}`;
-      const translated = this.t(key, params);
+      const translated = this.t(key, { ...error?.params, ...params });
       if (translated !== key) return translated;
       return this.locale === "en"
         ? this.t("error.REQUEST_FAILED")

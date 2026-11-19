@@ -43,6 +43,7 @@ export class GameApiClient {
     if (!response.ok) {
       const error = new Error(payload?.message || "片场连接失败。");
       error.code = payload?.error || "REQUEST_FAILED";
+      error.params = payload?.params || {};
       throw error;
     }
     return payload;

@@ -141,6 +141,7 @@ class GameEngine {
       throw new GameRuleError(
         "REQUIREMENTS_NOT_MET",
         `至少需要 ${card.requirements.minFriendly} 个友方角色。`,
+        { count: card.requirements.minFriendly },
       );
     }
 

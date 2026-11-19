@@ -7,6 +7,7 @@ import { AdventureView } from "./adventure-view.js";
 import { OutcomeView } from "./outcome-view.js";
 import { FeedbackView } from "./feedback-view.js";
 import { PlayabilityFeedback } from "./playability-feedback.js";
+import { PracticeSettings } from "./practice-settings.js";
 export class GameController {
   constructor(cardPool, i18n) {
     this.elements = queryElements();
@@ -14,6 +15,9 @@ export class GameController {
     this.i18n.applyDocument();
     this.i18n.bindSelect(this.elements.languageSelect);
     this.api = new GameApiClient();
+    this.practice = new PracticeSettings(this.elements.aiDifficulty, () => {
+      if (this.game && !this.currentStageId) this.startPractice();
+    });
     this.feedback = new FeedbackView(this.elements, this.i18n);
     this.playability = new PlayabilityFeedback(this.i18n);
     this.cardRenderer = new CardRenderer(this.elements, this.i18n);
@@ -109,7 +113,7 @@ export class GameController {
     try {
       this.game = stageId
         ? await this.api.createAdventureGame(stageId)
-        : await this.api.createGame(this.elements.aiDifficulty.value);
+        : await this.api.createGame(this.practice.difficulty);
       this.elements.tabs.forEach((tab) => {
         if (tab.dataset.view === "battle") tab.disabled = false;
       });
@@ -257,9 +261,6 @@ export class GameController {
       }
     });
     this.elements.playerHero.addEventListener("click", () => this.selectHero());
-    this.elements.aiDifficulty.addEventListener("change", () => {
-      if (!this.currentStageId) this.startPractice();
-    });
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape" && this.selectedAttackerId) {
         this.selectedAttackerId = null;

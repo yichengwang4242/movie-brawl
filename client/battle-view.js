@@ -1,13 +1,17 @@
+import { CombatFeedback } from "./combat-feedback.js";
+
 export class BattleView {
   constructor(elements, cardRenderer, callbacks, i18n) {
     this.elements = elements;
     this.cards = cardRenderer;
     this.callbacks = callbacks;
     this.i18n = i18n;
+    this.feedback = new CombatFeedback();
   }
 
   render(game, uiState) {
     const elements = this.elements;
+    this.feedback.observe(game);
     const attacker =
       uiState.selectedAttackerId === "hero" && game.player.weapon
         ? {
@@ -75,6 +79,8 @@ export class BattleView {
     this.renderBoard("player", game, uiState);
     this.renderBoard("enemy", game, uiState);
     this.renderLogs(game.logs);
+    this.feedback.decorateHero(elements.playerHero, "player");
+    this.feedback.decorateHero(elements.enemyHero, "enemy");
     if (game.encounter && !attacker) this.renderEncounter(game.encounter);
   }
 
@@ -212,6 +218,7 @@ export class BattleView {
         });
       }
       this.cards.attachInspector(node, card);
+      this.feedback.decorateCard(node, card.instanceId);
       container.appendChild(node);
     });
   }
@@ -221,6 +228,7 @@ export class BattleView {
     logs.forEach((entry, index) => {
       const item = document.createElement("li");
       item.dataset.tone = entry.tone;
+      item.classList.toggle("is-fresh", this.feedback.isFreshLog(entry));
       const sequence = document.createElement("span");
       sequence.textContent = String(logs.length - index).padStart(2, "0");
       const copy = document.createElement("p");
